@@ -1,0 +1,10 @@
+obj/
+bin/
+Libraries/
+cv210.dll
+cvaux210.dll
+cvextern.dll
+cxcore210.dll
+highgui210.dll
+ml210.dll
+opencv_ffmpeg210.dll
