@@ -12,177 +12,93 @@ using Emgu.CV.UI;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.VideoSurveillance;
+using PwTouchApp.Detection;
 
 namespace PwTouchApp.Forms
 {
     public partial class Form1 : Form
     {
-        private Capture _capture;
+        Detector1 detector;
 
-        BlobDetector blobDetector = new BlobDetector(BLOB_DETECTOR_TYPE.CC);
+        bool processing = false;
 
         public Form1()
         {
             InitializeComponent();
 
+            OpenWebcam();
+            StartProcessing();
+        }
+
+        void OpenWebcam()
+        {
             //try to create the capture
-            if (_capture == null)
+            if (Program.Capture == null)
             {
                 try
                 {
-                    _capture = new Capture();
+                    Program.Capture = new Capture();
                 }
                 catch (NullReferenceException excpt)
                 {   //show errors if there is any
-                    MessageBox.Show(excpt.Message);
-                }
-            }
-
-            if (_capture != null) //if camera capture has been successfully created
-            {
-                Application.Idle += ProcessFrame;
-            }
-        }
-
-        void ProcessFrame(object sender, EventArgs e)
-        {
-            DetectBlobs4();
-        }
-
-        void UpdateText(String text)
-        {
-            label3.Text = text;
-        }
-
-        void DetectBlobs(Image<Gray, Byte> frame)
-        {
-            //BlobDetector blobDetector = new BlobDetector(Emgu.CV.CvEnum.BLOB_DETECTOR_TYPE.CC);
-
-            using (MemStorage stor = new MemStorage())
-            {
-                Contour<Point> contours = frame.FindContours(
-                Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE,
-                Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_TREE,
-                stor);
-                
-                while(contours != null)
-                {
-                    UpdateText(contours.BoundingRectangle.ToString());
-
-                    contours = contours.HNext;
+                    MessageBox.Show("Openen van webcamstream mislukt.\r\n\r\n" + excpt.Message);
                 }
             }
         }
-        
-        private static MCvFont _font = new MCvFont(Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 1.0, 1.0);
-        private static BlobTrackerAuto<Bgr> _tracker;
-        private static IBGFGDetector<Bgr> _detector;
-        void DetectBlobs3()
+        void StartProcessing()
         {
-            if (_detector == null && _tracker == null)
-            {
-                _detector = new FGDetector<Bgr>(FORGROUND_DETECTOR_TYPE.FGD);
+            if (processing == true)
+                return;
 
-                _tracker = new BlobTrackerAuto<Bgr>();
+            if (Program.Capture != null) //if camera capture has been successfully created
+            {
+                detector = new Detector1();
+                processingTimer.Start();
             }
 
-            Image<Bgr, Byte> frame = _capture.QueryFrame();
-            frame._SmoothGaussian(3); //filter out noises
+            processing = true;
+        }
+        void StopProcessing()
+        {
+            if (processing == false)
+                return;
 
-            #region use the background code book model to find the forground mask
-            _detector.Update(frame);
+            detector = new Detector1();
+            processingTimer.Stop();
 
-            Image<Gray, Byte> foregroundMask = _detector.ForgroundMask;
-            #endregion
-
-            _tracker.Process(frame, foregroundMask);
-
-            foreach (MCvBlob blob in _tracker)
-            {
-                frame.Draw(Rectangle.Round(blob), new Bgr(255.0, 255.0, 255.0), 2);
-                frame.Draw(blob.ID.ToString(), ref _font, Point.Round(blob.Center), new Bgr(255.0, 255.0, 255.0));
-            }
-
-            capturedImageBox.Image = frame;
-            foregroundImageBox.Image = foregroundMask;
+            processing = false;
         }
 
-        private static BlobDetector _blobDetector;
-        private static BlobSeq oldList = new BlobSeq();
-        private static BlobSeq newList = new BlobSeq();
-        bool initial;
-        void DetectBlobs4()
+        private void processingTimer_Tick(object sender, EventArgs e)
         {
-            if (_detector == null && _tracker == null)
-            {
-                _detector = new FGDetector<Bgr>(FORGROUND_DETECTOR_TYPE.FGD);
-                _tracker = new BlobTrackerAuto<Bgr>();
-                _blobDetector = new BlobDetector(BLOB_DETECTOR_TYPE.CC);
-            }
+            //Image<Bgr, Byte> frame = Program.Capture.QueryFrame();
+            Image<Bgr, Byte> frame = new Image<Bgr, byte>("test.png");
 
-            Image<Bgr, Byte> frame = new Image<Bgr, byte>("test.png"); //_capture.QueryFrame();
-            frame._SmoothGaussian(3); //filter out noises
+            detector.DetectBlobs(frame);
 
-            #region use the background code book model to find the forground mask
-            _detector.Update(frame);
+            label3.Text = "Gevonden: ";
 
-            Image<Gray, Byte> foregroundMask = frame.Convert<Gray, Byte>(); //_detector.ForgroundMask; //new Image<Gray, byte>("foreground.png"); 
-            Image<Gray, Byte> backgroundMask = _detector.BackgroundMask;
-            #endregion
-
-            label3.Text = "Figuren: ";
-
-            _blobDetector.DetectNewBlob(frame, foregroundMask, newList, oldList);
-
-            foreach (MCvBlob blob in newList)
+            foreach (MCvBlob blob in detector.Blobs)
             {
                 frame.Draw(Rectangle.Round(blob), new Bgr(255.0, 255.0, 255.0), 2);
-                frame.Draw(blob.ID.ToString(), ref _font, Point.Round(blob.Center), new Bgr(255.0, 255.0, 255.0));
-
-                //Console.WriteLine(blob.Center.ToString() + " | " + blob.Size.ToString());
 
                 label3.Text += " | (" + Math.Round(blob.Center.X).ToString() + ", " + Math.Round(blob.Center.Y).ToString() + ")";
             }
 
-            oldList = newList;
-
             capturedImageBox.Image = frame;
-            foregroundImageBox.Image = foregroundMask;
+            foregroundImageBox.Image = detector.BgFgDetector.ForgroundMask;
         }
 
-        void DrawMotion(Image<Bgr, Byte> image, Rectangle motionRegion, double angle, Bgr color)
+        private void btnToggleProcessing_Click(object sender, EventArgs e)
         {
-            float circleRadius = (motionRegion.Width + motionRegion.Height) >> 2;
-            Point center = new Point(motionRegion.X + motionRegion.Width >> 1, motionRegion.Y + motionRegion.Height >> 1);
-
-            CircleF circle = new CircleF(
-            center,
-            circleRadius);
-
-            int xDirection = (int)(Math.Cos(angle * (Math.PI / 180.0)) * circleRadius);
-            int yDirection = (int)(Math.Sin(angle * (Math.PI / 180.0)) * circleRadius);
-            Point pointOnCircle = new Point(
-            center.X + xDirection,
-            center.Y - yDirection);
-            LineSegment2D line = new LineSegment2D(center, pointOnCircle);
-  
-            image.Draw(circle, color, 1);
-            image.Draw(line, color, 2);
-        }
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-
-            if (disposing && (components != null))
+            if (processing == true)
             {
-                components.Dispose();
+                StopProcessing();
             }
-
-            base.Dispose(disposing);
+            else
+            {
+                StartProcessing();
+            }
         }
     }
 }

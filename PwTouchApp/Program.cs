@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Emgu.CV;
 
 namespace PwTouchApp
 {
    static class Program
    {
+       public static Capture Capture { get; set; }
+
       /// <summary>
       /// The main entry point for the application.
       /// </summary>

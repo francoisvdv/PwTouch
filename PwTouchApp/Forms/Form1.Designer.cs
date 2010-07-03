@@ -15,11 +15,14 @@ namespace PwTouchApp.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.capturedImageBox = new Emgu.CV.UI.ImageBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.foregroundImageBox = new Emgu.CV.UI.ImageBox();
+            this.processingTimer = new System.Windows.Forms.Timer(this.components);
+            this.btnToggleProcessing = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.capturedImageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.foregroundImageBox)).BeginInit();
             this.SuspendLayout();
@@ -67,16 +70,33 @@ namespace PwTouchApp.Forms
             this.foregroundImageBox.TabIndex = 4;
             this.foregroundImageBox.TabStop = false;
             // 
+            // processingTimer
+            // 
+            this.processingTimer.Interval = 1;
+            this.processingTimer.Tick += new System.EventHandler(this.processingTimer_Tick);
+            // 
+            // btnToggleProcessing
+            // 
+            this.btnToggleProcessing.Location = new System.Drawing.Point(12, 313);
+            this.btnToggleProcessing.Name = "btnToggleProcessing";
+            this.btnToggleProcessing.Size = new System.Drawing.Size(109, 23);
+            this.btnToggleProcessing.TabIndex = 5;
+            this.btnToggleProcessing.Text = "Toggle Processing";
+            this.btnToggleProcessing.UseVisualStyleBackColor = true;
+            this.btnToggleProcessing.Click += new System.EventHandler(this.btnToggleProcessing_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(674, 326);
+            this.ClientSize = new System.Drawing.Size(674, 343);
+            this.Controls.Add(this.btnToggleProcessing);
             this.Controls.Add(this.foregroundImageBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.capturedImageBox);
+            this.DoubleBuffered = true;
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.capturedImageBox)).EndInit();
@@ -93,6 +113,8 @@ namespace PwTouchApp.Forms
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private Emgu.CV.UI.ImageBox foregroundImageBox;
+        private System.Windows.Forms.Timer processingTimer;
+        private System.Windows.Forms.Button btnToggleProcessing;
     }
 }
 
