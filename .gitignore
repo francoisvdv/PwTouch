@@ -8,3 +8,13 @@ cxcore210.dll
 highgui210.dll
 ml210.dll
 opencv_ffmpeg210.dll
+
+_ReSharper.JamOrigin/
+Debug/
+Release/
+*.suo
+*.ncb
+*.pdb
+*.user
+*.cachefile
+_ReSharper.*/
