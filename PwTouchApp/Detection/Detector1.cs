@@ -40,8 +40,10 @@ namespace PwTouchApp.Detection
             //Find foreground mask
             bgfgDetector.Update(frame);
 
-            Image<Gray, Byte> foregroundMask = frame.Convert<Gray, Byte>(); //_detector.ForgroundMask; //new Image<Gray, byte>("foreground.png"); 
-            
+            Image<Gray, Byte> foregroundMask = frame.Convert<Gray, Byte>();
+            //Image<Gray, Byte> foregroundMask = bgfgDetector.ForgroundMask;
+            //Image<Gray, Byte> foregroundMask = new Image<Gray, byte>("foreground.png");
+
             while (blobDetector.DetectNewBlob(frame, foregroundMask, newList, oldList) != 0)
             {
                 oldList = newList;

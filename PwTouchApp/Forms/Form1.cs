@@ -56,15 +56,19 @@ namespace PwTouchApp.Forms
                 processingTimer.Start();
             }
 
+            btnToggleProcessing.Text = "Stop Processing";
+
             processing = true;
         }
         void StopProcessing()
         {
             if (processing == false)
                 return;
-
-            detector = new Detector1();
+            
             processingTimer.Stop();
+            detector = new Detector1();
+
+            btnToggleProcessing.Text = "Start Processing";
 
             processing = false;
         }

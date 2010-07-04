@@ -5,6 +5,8 @@ using Emgu.CV;
 
 namespace PwTouchApp
 {
+    //http://michaelsync.net/2010/04/06/step-by-step-tutorial-installing-multi-touch-simulator-for-silverlight-phone-7
+
    static class Program
    {
        public static Capture Capture { get; set; }
