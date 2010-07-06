@@ -52,7 +52,7 @@ namespace PwTouch
 				eventHandler(this, new NewFrameEventArgs(Stopwatch.GetTimestamp(), contacts, null));
 
             contacts.Clear();
-            contacts.Add(new Contact(0, ContactState.Moved, new System.Windows.Point(10, 10), SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height));
+            contacts.Add(new Contact(0, ContactState.New, new System.Windows.Point(10, 10), SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height));
 		}
 
         public System.Windows.UIElement GetConfiguration()
