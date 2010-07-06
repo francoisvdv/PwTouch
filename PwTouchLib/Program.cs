@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Emgu.CV;
 
-namespace PwTouchApp
+namespace PwTouchLib
 {
     //http://michaelsync.net/2010/04/06/step-by-step-tutorial-installing-multi-touch-simulator-for-silverlight-phone-7
 

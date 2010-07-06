@@ -1,4 +1,4 @@
-namespace PwTouchApp.Forms
+namespace PwTouchLib.Forms
 {
     partial class Form1
     {

@@ -12,9 +12,9 @@ using Emgu.CV.UI;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.VideoSurveillance;
-using PwTouchApp.Detection;
+using PwTouchLib.Detection;
 
-namespace PwTouchApp.Forms
+namespace PwTouchLib.Forms
 {
     public partial class Form1 : Form
     {

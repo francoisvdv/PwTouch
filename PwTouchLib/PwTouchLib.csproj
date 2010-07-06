@@ -65,6 +65,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Detection\Detector.cs" />
+    <Compile Include="Detection\Detector2.cs" />
     <Compile Include="Detection\Detector1.cs" />
     <Compile Include="Forms\Form1.cs">
       <SubType>Form</SubType>

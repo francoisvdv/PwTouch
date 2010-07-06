@@ -9,22 +9,23 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.VideoSurveillance;
 
-namespace PwTouchApp.Detection
+namespace PwTouchLib.Detection
 {
-    public class Detector1 : IDisposable
+    public class Detector1 : Detector, IDisposable
     {
         IBGFGDetector<Bgr> bgfgDetector;
         BlobDetector blobDetector;
-        BlobSeq oldList = new BlobSeq();
-        BlobSeq newList = new BlobSeq();
+
+        BlobSeq blobs = new BlobSeq();
 
         public IBGFGDetector<Bgr> BgFgDetector
         {
             get { return bgfgDetector; }
         }
-        public BlobSeq Blobs
+
+        public override IEnumerable<MCvBlob> Blobs
         {
-            get { return oldList; }
+            get { return blobs; }
         }
 
         public Detector1()
@@ -33,10 +34,8 @@ namespace PwTouchApp.Detection
             blobDetector = new BlobDetector(BLOB_DETECTOR_TYPE.Simple);
         }
 
-        public void DetectBlobs(Image<Bgr, Byte> frame)
+        public override void DetectBlobs(Image<Bgr, Byte> frame)
         {
-            frame._SmoothGaussian(3); //filter out noises
-
             //Find foreground mask
             bgfgDetector.Update(frame);
 
@@ -44,18 +43,16 @@ namespace PwTouchApp.Detection
             //Image<Gray, Byte> foregroundMask = bgfgDetector.ForgroundMask;
             //Image<Gray, Byte> foregroundMask = new Image<Gray, byte>("foreground.png");
 
-            while (blobDetector.DetectNewBlob(frame, foregroundMask, newList, oldList) != 0)
+            BlobSeq newList = new BlobSeq();
+            while (blobDetector.DetectNewBlob(frame, foregroundMask, newList, blobs) != 0)
             {
-                oldList = newList;
+                blobs = newList;
             }
         }
 
         public void Dispose()
         {
             blobDetector.Dispose();
-
-            oldList.Dispose();
-            newList.Dispose();
         }
     }
 }
