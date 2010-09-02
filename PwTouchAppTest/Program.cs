@@ -10,7 +10,8 @@ namespace PwTouchAppTest
     {
         static void Main(string[] args)
         {
-            Application.Run(new PwTouchLib.Forms.Form1());
+            Application.EnableVisualStyles();
+            Application.Run(new PwTouchLib.Forms.MainForm());
         }
     }
 }

@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PwTouchAppTest</RootNamespace>
     <AssemblyName>PwTouchAppTest</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -49,9 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PwTouchLib\PwTouchLib.csproj">
-      <Project>{9EBFE138-D9CB-4384-90DB-38C46A95FC6E}</Project>
+      <Project>{D1EDAEE2-503D-425A-8EAE-0EE2718384F0}</Project>
       <Name>PwTouchLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Francois van der Ven")]
 [assembly: AssemblyProduct("PwTouchLib")]
-[assembly: AssemblyCopyright("Copyright © Francois van der Ven 2010")]
+[assembly: AssemblyCopyright("Copyright © Francois 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6275d204-8490-4b0a-8d8e-1451e9e5772d")]
+[assembly: Guid("e10aeb3c-c292-4a6d-aad7-ce5f5bcb9eec")]
 
 // Version information for an assembly consists of the following four values:
 //

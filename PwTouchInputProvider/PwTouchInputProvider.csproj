@@ -58,7 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PwTouchLib\PwTouchLib.csproj">
-      <Project>{9EBFE138-D9CB-4384-90DB-38C46A95FC6E}</Project>
+      <Project>{D1EDAEE2-503D-425A-8EAE-0EE2718384F0}</Project>
       <Name>PwTouchLib</Name>
     </ProjectReference>
   </ItemGroup>
