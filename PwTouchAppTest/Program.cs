@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace PwTouchAppTestWinForms
+using PwTouchLib.Forms;
+
+namespace PwTouchLib
 {
     class Program
     {

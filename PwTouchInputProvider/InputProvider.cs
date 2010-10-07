@@ -57,7 +57,7 @@ namespace PwTouch
 
         public System.Windows.UIElement GetConfiguration()
         {
-            return new PwTouchLib.Forms.Configuration();
+            return null;
         }
 
         public bool SendImageType(ImageType imageType, bool value)
