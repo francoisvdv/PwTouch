@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,15 +14,35 @@ using System.Windows.Shapes;
 namespace PwTouchLib.Forms
 {
     /// <summary>
-    /// Interaction logic for Configuration.xaml
+    /// Adds MainControls to its WindowsFormsHost.
     /// </summary>
     public partial class Configuration : UserControl
     {
+        MainControls m;
+
         public Configuration()
         {
-            InitializeComponent();
+            DataContext = this;
 
-            //this.windowsFormsHost1.Child = new MainForm();
+            InitializeComponent();
         }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            m = new MainControls();
+            this.Width = m.Size.Width;
+            this.Height = m.Size.Height;
+            this.windowsFormsHost1.Child = m;
+
+            m.Start();
+        }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.windowsFormsHost1.Child = null;
+            m.Stop();
+            m.Dispose();
+        }
+
     }
 }

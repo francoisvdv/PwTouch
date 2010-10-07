@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="InputProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Voorbeeld.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PwTouchLib\PwTouchLib.csproj">

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using AForge.Video.DirectShow;
@@ -26,15 +25,18 @@ namespace PwTouchLib.Forms
 
         void MainControls_Load(object sender, EventArgs e)
         {
-            StartCamera();
-
             SetUpFilters();
         }
-        void MainControls_ParentChanged(object sender, EventArgs e)
+
+        public void Start()
+        {
+            StartCamera();
+        }
+        public void Stop()
         {
             StopCamera();
         }
-        
+
         void StartCamera()
         {
             camera = Camera.GetCamera(0);

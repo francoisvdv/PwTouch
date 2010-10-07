@@ -1,0 +1,9 @@
+﻿<Window x:Class="PwTouchAppWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:pwTouchConfig="clr-namespace:PwTouchLib.Forms;assembly=PwTouchLib"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <pwTouchConfig:Configuration Name="UserControl"/>
+    </Grid>
+</Window>
