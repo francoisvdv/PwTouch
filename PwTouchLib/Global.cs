@@ -6,6 +6,8 @@ namespace PwTouchLib
 {
     public static class Global
     {
+        public const bool DeveloperMode = true;
+
         public static readonly AppSettings AppSettings = new AppSettings(System.Windows.Forms.Application.StartupPath + "//Settings.xml");
     }
 }

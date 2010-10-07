@@ -24,7 +24,6 @@ namespace PwTouchLib.Forms
             : this(null)
         {
         }
-
         public MainForm(VideoCaptureDevice cam)
         {
             InitializeComponent();
@@ -36,8 +35,9 @@ namespace PwTouchLib.Forms
             else
                 this.camera = cam;
 
-            camera.DesiredFrameSize = new Size(640, 480);
+            //camera.DesiredFrameSize = new Size(640, 480);
         }
+
         void MainForm_Load(object sender, EventArgs e)
         {
             StartCamera();
@@ -70,15 +70,19 @@ namespace PwTouchLib.Forms
                 return;
 
             camera.NewFrame += VideoSource_NewFrame;
-            camera.Start();
+
+            if(!camera.IsRunning && Global.DeveloperMode)
+                camera.Start();
         }
         void StopCamera()
         {
             if (camera == null || !camera.IsRunning)
                 return;
 
-            camera.SignalToStop();
-            camera = null;
+            camera.NewFrame -= VideoSource_NewFrame;
+
+            if(Global.DeveloperMode)
+                camera.SignalToStop();
         }
 
         void VideoSource_NewFrame(object sender, AForge.Video.NewFrameEventArgs eventArgs)
@@ -102,10 +106,14 @@ namespace PwTouchLib.Forms
 
             camera.DisplayPropertyPage(this.Handle);
         }
-
-        private void btnRestartDetector_Click(object sender, EventArgs e)
+        void btnRestartDetector_Click(object sender, EventArgs e)
         {
             restartDetector = true;
+        }
+        void btnCalibrate_Click(object sender, EventArgs e)
+        {
+            Calibration c = new Calibration();
+            c.ShowDialog();
         }
     }
 }

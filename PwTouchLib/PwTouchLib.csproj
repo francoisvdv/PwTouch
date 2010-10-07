@@ -68,6 +68,12 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="Detector1.cs" />
+    <Compile Include="Forms\Calibration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Calibration.Designer.cs">
+      <DependentUpon>Calibration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +86,9 @@
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\Calibration.resx">
+      <DependentUpon>Calibration.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

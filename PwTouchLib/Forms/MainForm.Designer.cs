@@ -33,7 +33,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.btnRestartDetector = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnCalibrate = new System.Windows.Forms.Button();
             this.btnCameraSettings = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -86,7 +86,7 @@
             this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.comboBox1);
             this.tabPage1.Controls.Add(this.btnRestartDetector);
-            this.tabPage1.Controls.Add(this.button1);
+            this.tabPage1.Controls.Add(this.btnCalibrate);
             this.tabPage1.Controls.Add(this.btnCameraSettings);
             this.tabPage1.Controls.Add(this.pictureBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -117,15 +117,16 @@
             this.btnRestartDetector.UseVisualStyleBackColor = true;
             this.btnRestartDetector.Click += new System.EventHandler(this.btnRestartDetector_Click);
             // 
-            // button1
+            // btnCalibrate
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(652, 91);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(134, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Calibreren";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnCalibrate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCalibrate.Location = new System.Drawing.Point(652, 91);
+            this.btnCalibrate.Name = "btnCalibrate";
+            this.btnCalibrate.Size = new System.Drawing.Size(134, 23);
+            this.btnCalibrate.TabIndex = 3;
+            this.btnCalibrate.Text = "Calibreren";
+            this.btnCalibrate.UseVisualStyleBackColor = true;
+            this.btnCalibrate.Click += new System.EventHandler(this.btnCalibrate_Click);
             // 
             // btnCameraSettings
             // 
@@ -164,18 +165,16 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.btnRemove);
             this.groupBox2.Controls.Add(this.btnSave);
             this.groupBox2.Controls.Add(this.cbFilterGroups);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.lbFilters);
             this.groupBox2.Controls.Add(this.propertyGrid1);
-            this.groupBox2.Location = new System.Drawing.Point(6, 6);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox2.Location = new System.Drawing.Point(3, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(821, 571);
+            this.groupBox2.Size = new System.Drawing.Size(625, 488);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Filters";
@@ -183,7 +182,7 @@
             // btnRemove
             // 
             this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemove.Location = new System.Drawing.Point(740, 62);
+            this.btnRemove.Location = new System.Drawing.Point(544, 62);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(75, 23);
             this.btnRemove.TabIndex = 9;
@@ -193,7 +192,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(662, 62);
+            this.btnSave.Location = new System.Drawing.Point(466, 62);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(72, 23);
             this.btnSave.TabIndex = 8;
@@ -205,7 +204,7 @@
             this.cbFilterGroups.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cbFilterGroups.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbFilterGroups.FormattingEnabled = true;
-            this.cbFilterGroups.Location = new System.Drawing.Point(662, 35);
+            this.cbFilterGroups.Location = new System.Drawing.Point(466, 35);
             this.cbFilterGroups.Name = "cbFilterGroups";
             this.cbFilterGroups.Size = new System.Drawing.Size(153, 21);
             this.cbFilterGroups.TabIndex = 7;
@@ -228,29 +227,28 @@
             this.lbFilters.FormattingEnabled = true;
             this.lbFilters.Location = new System.Drawing.Point(6, 35);
             this.lbFilters.Name = "lbFilters";
-            this.lbFilters.Size = new System.Drawing.Size(650, 509);
+            this.lbFilters.Size = new System.Drawing.Size(454, 418);
             this.lbFilters.TabIndex = 4;
             // 
             // propertyGrid1
             // 
             this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.propertyGrid1.Location = new System.Drawing.Point(662, 101);
+            this.propertyGrid1.Location = new System.Drawing.Point(466, 101);
             this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(153, 466);
+            this.propertyGrid1.Size = new System.Drawing.Size(153, 383);
             this.propertyGrid1.TabIndex = 5;
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.pictureBox2);
             this.groupBox1.Controls.Add(this.pictureBox3);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Location = new System.Drawing.Point(833, 6);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.groupBox1.Location = new System.Drawing.Point(628, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(161, 571);
+            this.groupBox1.Size = new System.Drawing.Size(161, 488);
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Preview";
@@ -321,7 +319,7 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Button btnRestartDetector;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnCalibrate;
         private System.Windows.Forms.Button btnCameraSettings;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TabPage tabPage2;
