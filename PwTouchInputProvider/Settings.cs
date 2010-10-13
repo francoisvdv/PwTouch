@@ -3,7 +3,7 @@ using System.Xml;
 using System.IO;
 using System.Collections.Generic;
 
-namespace PwTouchLib
+namespace PwTouchInputProvider
 {
     public abstract class Settings
     {
@@ -144,15 +144,26 @@ namespace PwTouchLib
             this.filePath = filePath;
         }
 
-        public int CameraID
+        public int Camera
         {
             get
             {
                 int i;
-                int.TryParse(GetValue("CameraID", "0"), out i);
+                int.TryParse(GetValue("Camera", "0"), out i);
                 return i;
             }
-            set { SetValue("CameraID", value.ToString()); }
+            set { SetValue("Camera", value.ToString()); }
+        }
+
+        public int CameraMode
+        {
+            get
+            {
+                int i;
+                int.TryParse(GetValue("CameraMode", "0"), out i);
+                return i;
+            }
+            set { SetValue("CameraMode", value.ToString()); }
         }
     }
 }

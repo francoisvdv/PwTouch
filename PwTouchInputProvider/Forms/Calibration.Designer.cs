@@ -1,4 +1,4 @@
-﻿namespace PwTouchLib.Forms
+﻿namespace PwTouchInputProvider.Forms
 {
     partial class Calibration
     {

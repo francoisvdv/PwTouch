@@ -5,10 +5,11 @@ using System.Drawing;
 
 //http://www.aforgenet.com/framework/features/
 
-namespace PwTouchLib
+namespace PwTouchInputProvider
 {
     public interface IDetector
     {
+        bool DrawBlobMarkers { get; set; }
         void ProcessFrame(ref Bitmap frame);
     }
 }

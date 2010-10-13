@@ -1,4 +1,4 @@
-﻿namespace PwTouchLib.Forms
+﻿namespace PwTouchInputProvider.Forms
 {
     partial class MainForm
     {
@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label4 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.cbCameraMode = new System.Windows.Forms.ComboBox();
+            this.cbCamera = new System.Windows.Forms.ComboBox();
             this.btnRestartDetector = new System.Windows.Forms.Button();
             this.btnCalibrate = new System.Windows.Forms.Button();
             this.btnCameraSettings = new System.Windows.Forms.Button();
@@ -59,16 +59,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
-            // label4
-            // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(652, 9);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(46, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Camera:";
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -77,14 +67,14 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(800, 520);
+            this.tabControl1.Size = new System.Drawing.Size(834, 520);
             this.tabControl1.TabIndex = 4;
             // 
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.White;
-            this.tabPage1.Controls.Add(this.label4);
-            this.tabPage1.Controls.Add(this.comboBox1);
+            this.tabPage1.Controls.Add(this.cbCameraMode);
+            this.tabPage1.Controls.Add(this.cbCamera);
             this.tabPage1.Controls.Add(this.btnRestartDetector);
             this.tabPage1.Controls.Add(this.btnCalibrate);
             this.tabPage1.Controls.Add(this.btnCameraSettings);
@@ -92,26 +82,38 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(792, 494);
+            this.tabPage1.Size = new System.Drawing.Size(826, 494);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Camera Configuratie";
             // 
-            // comboBox1
+            // cbCameraMode
             // 
-            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(704, 6);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(82, 21);
-            this.comboBox1.TabIndex = 5;
+            this.cbCameraMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbCameraMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbCameraMode.FormattingEnabled = true;
+            this.cbCameraMode.Location = new System.Drawing.Point(652, 33);
+            this.cbCameraMode.Name = "cbCameraMode";
+            this.cbCameraMode.Size = new System.Drawing.Size(168, 21);
+            this.cbCameraMode.TabIndex = 7;
+            this.cbCameraMode.SelectedIndexChanged += new System.EventHandler(this.cbCameraMode_SelectedIndexChanged);
+            // 
+            // cbCamera
+            // 
+            this.cbCamera.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbCamera.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbCamera.FormattingEnabled = true;
+            this.cbCamera.Location = new System.Drawing.Point(652, 6);
+            this.cbCamera.Name = "cbCamera";
+            this.cbCamera.Size = new System.Drawing.Size(168, 21);
+            this.cbCamera.TabIndex = 5;
+            this.cbCamera.SelectedIndexChanged += new System.EventHandler(this.cbCamera_SelectedIndexChanged);
             // 
             // btnRestartDetector
             // 
             this.btnRestartDetector.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRestartDetector.Location = new System.Drawing.Point(652, 62);
+            this.btnRestartDetector.Location = new System.Drawing.Point(652, 99);
             this.btnRestartDetector.Name = "btnRestartDetector";
-            this.btnRestartDetector.Size = new System.Drawing.Size(134, 23);
+            this.btnRestartDetector.Size = new System.Drawing.Size(168, 23);
             this.btnRestartDetector.TabIndex = 4;
             this.btnRestartDetector.Text = "Detector Herstarten";
             this.btnRestartDetector.UseVisualStyleBackColor = true;
@@ -120,9 +122,9 @@
             // btnCalibrate
             // 
             this.btnCalibrate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCalibrate.Location = new System.Drawing.Point(652, 91);
+            this.btnCalibrate.Location = new System.Drawing.Point(652, 128);
             this.btnCalibrate.Name = "btnCalibrate";
-            this.btnCalibrate.Size = new System.Drawing.Size(134, 23);
+            this.btnCalibrate.Size = new System.Drawing.Size(168, 23);
             this.btnCalibrate.TabIndex = 3;
             this.btnCalibrate.Text = "Calibreren";
             this.btnCalibrate.UseVisualStyleBackColor = true;
@@ -131,11 +133,11 @@
             // btnCameraSettings
             // 
             this.btnCameraSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCameraSettings.Location = new System.Drawing.Point(652, 33);
+            this.btnCameraSettings.Location = new System.Drawing.Point(652, 70);
             this.btnCameraSettings.Name = "btnCameraSettings";
-            this.btnCameraSettings.Size = new System.Drawing.Size(134, 23);
+            this.btnCameraSettings.Size = new System.Drawing.Size(168, 23);
             this.btnCameraSettings.TabIndex = 2;
-            this.btnCameraSettings.Text = "Camera Instellingen";
+            this.btnCameraSettings.Text = "Meer Camera Instellingen";
             this.btnCameraSettings.UseVisualStyleBackColor = true;
             this.btnCameraSettings.Click += new System.EventHandler(this.btnCameraSettings_Click);
             // 
@@ -159,7 +161,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(792, 494);
+            this.tabPage2.Size = new System.Drawing.Size(826, 494);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Filters";
             // 
@@ -291,7 +293,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 520);
+            this.ClientSize = new System.Drawing.Size(834, 520);
             this.Controls.Add(this.tabControl1);
             this.Name = "MainForm";
             this.Text = "PwTouchApp Configuratie";
@@ -299,7 +301,6 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
@@ -314,10 +315,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cbCamera;
         private System.Windows.Forms.Button btnRestartDetector;
         private System.Windows.Forms.Button btnCalibrate;
         private System.Windows.Forms.Button btnCameraSettings;
@@ -335,6 +335,7 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cbCameraMode;
 
 
     }

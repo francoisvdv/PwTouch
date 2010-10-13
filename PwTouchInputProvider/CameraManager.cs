@@ -5,13 +5,18 @@ using System.Text;
 using AForge.Video;
 using AForge.Video.DirectShow;
 
-namespace PwTouchLib
+namespace PwTouchInputProvider
 {
-    public static class Camera
+    public static class CameraManager
     {
+        public static FilterInfoCollection GetCameras()
+        {
+            return new FilterInfoCollection(FilterCategory.VideoInputDevice);
+        }
+
         public static VideoCaptureDevice GetCamera(int index)
         {
-            FilterInfoCollection devices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+            FilterInfoCollection devices = GetCameras();
             if (devices.Count == 0 || index < 0 || index > devices.Count)
                 return null;
             

@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using PwTouchInputProvider.Forms;
 
-using PwTouchLib.Forms;
-
-namespace PwTouchLib
+namespace PwTouchInputProvider
 {
     class Program
     {
         static void Main(string[] args)
         {
             Application.EnableVisualStyles();
-            Application.Run(new MainForm());
+
+            InputProvider ip = new InputProvider();
+            if (ip.Camera == null)
+                return;
+
+            ip.StartCamera();
+
+            Application.Run(new MainForm(ip));
+
+            ip.StopCamera();
         }
     }
 }

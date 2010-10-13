@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 
-namespace PwTouchLib.Forms
+namespace PwTouchInputProvider.Forms
 {
     public partial class Calibration : Form
     {
