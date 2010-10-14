@@ -13,8 +13,6 @@ namespace PwTouchInputProvider
     /// </summary>
     public class Detector1 : IDetector
     {
-        public bool DrawBlobMarkers { get; set; }
-
         FiltersSequence     fSequence = new FiltersSequence();
         BlobCounter         blobCounter = new BlobCounter();
 
@@ -24,33 +22,31 @@ namespace PwTouchInputProvider
 
             fSequence.Add(Grayscale.CommonAlgorithms.RMY);
             fSequence.Add(new Difference(backgroundImage));
-            fSequence.Add(new Blur());
-            fSequence.Add(new Threshold(100));
-            fSequence.Add(new Erosion());
+            fSequence.Add(new Threshold(50));
 
             blobCounter.ObjectsOrder = ObjectsOrder.None;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
+        int i = 2;
         public void ProcessFrame(ref Bitmap frame)
         {
+            i++;
+            if (i != 3)
+                return;
+            i = 0;
+
             Bitmap processed = (Bitmap)frame.Clone();
             processed = fSequence.Apply(frame);
 
             blobCounter.ProcessImage(processed);
 
-            if (DrawBlobMarkers)
-            {
-                foreach (Rectangle r in blobCounter.GetObjectsRectangles())
-                {
-                    Graphics g = Graphics.FromImage(frame);
-                    g.DrawRectangle(Pens.Yellow, r);
-                }
-            }
-
             processed.Dispose();
+        }
+
+        public Rectangle[] GetBlobRectangles()
+        {
+            return blobCounter.GetObjectsRectangles();
         }
     }
 }

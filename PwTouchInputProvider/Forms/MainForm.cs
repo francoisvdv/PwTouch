@@ -19,23 +19,22 @@ namespace PwTouchInputProvider.Forms
             InitializeComponent();
 
             this.inputProvider = provider;
-            this.inputProvider.Camera.NewFrame += new AForge.Video.NewFrameEventHandler(Camera_NewFrame);
 
             SetUpCameras();
             SetUpFilters();
         }
 
-        void Camera_NewFrame(object sender, AForge.Video.NewFrameEventArgs eventArgs)
-        {
-            throw new NotImplementedException();
-        }
-
         void MainForm_Load(object sender, EventArgs e)
         {
+            this.inputProvider.DrawBlobMarkers = true;
+            this.inputProvider.OnProcessed += SetFrame;
         }
         void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Global.AppSettings.Save();
+
+            this.inputProvider.DrawBlobMarkers = false;
+            this.inputProvider.OnProcessed -= SetFrame;
         }
 
         //Load controls
@@ -92,6 +91,10 @@ namespace PwTouchInputProvider.Forms
             inputProvider.StopCamera();
             inputProvider.Camera = CameraManager.GetCamera(cbCamera.SelectedIndex);
 
+            Global.AppSettings.Camera = cbCamera.SelectedIndex;
+
+            cbCameraMode.Items.Clear();
+
             foreach (VideoCapabilities vc in inputProvider.Camera.VideoCapabilities)
             {
                 cbCameraMode.Items.Add(vc.FrameSize.Width + " x " + vc.FrameSize.Height + " @ " + vc.MaxFrameRate + "Hz");
@@ -103,8 +106,14 @@ namespace PwTouchInputProvider.Forms
         }
         void cbCameraMode_SelectedIndexChanged(object sender, EventArgs e)
         {
+            inputProvider.Camera.Stop();
             inputProvider.Camera.DesiredFrameSize = inputProvider.Camera.VideoCapabilities[cbCameraMode.SelectedIndex].FrameSize;
             inputProvider.Camera.DesiredFrameRate = inputProvider.Camera.VideoCapabilities[cbCameraMode.SelectedIndex].MaxFrameRate;
+            inputProvider.Camera.Start();
+
+            Global.AppSettings.CameraMode = cbCamera.SelectedIndex;
+
+            inputProvider.RestartDetector();
         }
     }
 }

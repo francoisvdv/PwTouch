@@ -34,6 +34,9 @@ namespace PwTouchInputProvider
         }
         #endregion
 
+        public delegate void ProcessFrameDelegate(ref Bitmap frame);
+        public ProcessFrameDelegate OnProcessed;
+
         List<Contact> contacts = new List<Contact>();
         System.Timers.Timer timer;
 
@@ -41,7 +44,9 @@ namespace PwTouchInputProvider
         IDetector detector;
         bool restartDetector;
 
+        public bool DrawBlobMarkers { get; set; }
         public VideoCaptureDevice Camera { get { return camera; } set { camera = value; } }
+        public IDetector Detector { get { return detector; } set { detector = value; } }
 
         public InputProvider()
         {
@@ -122,9 +127,22 @@ namespace PwTouchInputProvider
             {
                 detector = new Detector1((Bitmap)frame.Clone());
                 restartDetector = false;
+                return;
             }
 
             detector.ProcessFrame(ref frame);
+
+            if (DrawBlobMarkers)
+            {
+                foreach (Rectangle r in Detector.GetBlobRectangles())
+                {
+                    Graphics g = Graphics.FromImage(frame);
+                    g.DrawRectangle(Pens.Yellow, r);
+                }
+            }
+
+            if(OnProcessed != null)
+                OnProcessed(ref frame);
         }
     }
 }

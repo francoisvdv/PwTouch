@@ -9,7 +9,7 @@ namespace PwTouchInputProvider
 {
     public interface IDetector
     {
-        bool DrawBlobMarkers { get; set; }
         void ProcessFrame(ref Bitmap frame);
+        Rectangle[] GetBlobRectangles();
     }
 }
