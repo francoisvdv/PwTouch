@@ -22,8 +22,11 @@ namespace PwTouchInputProvider
 
             fSequence.Add(Grayscale.CommonAlgorithms.RMY);
             fSequence.Add(new Difference(backgroundImage));
-            fSequence.Add(new Threshold(50));
+            fSequence.Add(new Threshold(10));
 
+            blobCounter.MinWidth = 10;
+            blobCounter.MinHeight = 10;
+            blobCounter.FilterBlobs = true;
             blobCounter.ObjectsOrder = ObjectsOrder.None;
         }
 

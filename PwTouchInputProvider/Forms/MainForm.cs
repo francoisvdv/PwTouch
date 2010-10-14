@@ -111,7 +111,7 @@ namespace PwTouchInputProvider.Forms
             inputProvider.Camera.DesiredFrameRate = inputProvider.Camera.VideoCapabilities[cbCameraMode.SelectedIndex].MaxFrameRate;
             inputProvider.Camera.Start();
 
-            Global.AppSettings.CameraMode = cbCamera.SelectedIndex;
+            Global.AppSettings.CameraMode = cbCameraMode.SelectedIndex;
 
             inputProvider.RestartDetector();
         }
