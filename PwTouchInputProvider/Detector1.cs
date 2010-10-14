@@ -11,18 +11,15 @@ namespace PwTouchInputProvider
     /// <summary>
     /// This detector compares the current frame to the first frame of the image sequence.
     /// </summary>
-    public class Detector1 : IDetector
+    public class Detector1 : DetectorBase
     {
-        FiltersSequence     fSequence = new FiltersSequence();
-        BlobCounter         blobCounter = new BlobCounter();
-
         public Detector1(Bitmap backgroundImage)
         {
             backgroundImage = Grayscale.CommonAlgorithms.RMY.Apply(backgroundImage);
 
             fSequence.Add(Grayscale.CommonAlgorithms.RMY);
             fSequence.Add(new Difference(backgroundImage));
-            fSequence.Add(new Threshold(10));
+            fSequence.Add(new Threshold(100));
 
             blobCounter.MinWidth = 10;
             blobCounter.MinHeight = 10;
@@ -30,9 +27,8 @@ namespace PwTouchInputProvider
             blobCounter.ObjectsOrder = ObjectsOrder.None;
         }
 
-
         int i = 2;
-        public void ProcessFrame(ref Bitmap frame)
+        public override void ProcessFrame(ref Bitmap frame)
         {
             i++;
             if (i != 3)
@@ -45,11 +41,6 @@ namespace PwTouchInputProvider
             blobCounter.ProcessImage(processed);
 
             processed.Dispose();
-        }
-
-        public Rectangle[] GetBlobRectangles()
-        {
-            return blobCounter.GetObjectsRectangles();
         }
     }
 }

@@ -41,12 +41,12 @@ namespace PwTouchInputProvider
         System.Timers.Timer timer;
 
         VideoCaptureDevice camera;
-        IDetector detector;
+        DetectorBase detector;
         bool restartDetector;
 
         public bool DrawBlobMarkers { get; set; }
         public VideoCaptureDevice Camera { get { return camera; } set { camera = value; } }
-        public IDetector Detector { get { return detector; } set { detector = value; } }
+        public DetectorBase Detector { get { return detector; } set { detector = value; } }
 
         public InputProvider()
         {
