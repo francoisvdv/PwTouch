@@ -46,6 +46,8 @@ namespace PwTouchInputProvider.Forms
             }
 
             cbCamera.SelectedIndex = Global.AppSettings.Camera;
+
+            nudSkipFrames.Value = Global.AppSettings.SkipFrames;
         }
         void SetUpFilters()
         {
@@ -113,7 +115,14 @@ namespace PwTouchInputProvider.Forms
 
             Global.AppSettings.CameraMode = cbCameraMode.SelectedIndex;
 
+            nudSkipFrames.Maximum = inputProvider.Camera.VideoCapabilities[cbCameraMode.SelectedIndex].MaxFrameRate;
+
             inputProvider.RestartDetector();
+        }
+
+        private void nudSkipFrames_ValueChanged(object sender, EventArgs e)
+        {
+            Global.AppSettings.SkipFrames = (int)nudSkipFrames.Value;
         }
     }
 }

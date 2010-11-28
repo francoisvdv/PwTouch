@@ -37,16 +37,18 @@ namespace PwTouchInputProvider
         public delegate void ProcessFrameDelegate(ref Bitmap frame);
         public ProcessFrameDelegate OnProcessed;
 
-        List<Contact> contacts = new List<Contact>();
+        Queue<Contact> contacts = new Queue<Contact>();
         System.Timers.Timer timer;
 
         VideoCaptureDevice camera;
         DetectorBase detector;
+        TrackerBase tracker;
         bool restartDetector;
 
         public bool DrawBlobMarkers { get; set; }
         public VideoCaptureDevice Camera { get { return camera; } set { camera = value; } }
         public DetectorBase Detector { get { return detector; } set { detector = value; } }
+        public TrackerBase Tracker { get { return tracker; } set { tracker = value; } }
 
         public InputProvider()
         {
@@ -65,15 +67,15 @@ namespace PwTouchInputProvider
                 
                 return;
             }
-            
+
             timer = new System.Timers.Timer(1000 / 60d);
 			timer.Elapsed += timer_Elapsed;
         }
-        
+
 		public void Start()
 		{
             StartCamera();
-			timer.Start();
+            timer.Start();
 		}
 		public void Stop()
 		{
@@ -88,7 +90,6 @@ namespace PwTouchInputProvider
 				eventHandler(this, new NewFrameEventArgs(Stopwatch.GetTimestamp(), contacts, null));
 
             contacts.Clear();
-            contacts.Add(new Contact(0, ContactState.New, new System.Windows.Point(10, 10), SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height));
 		}
 
         //Camera
@@ -114,31 +115,40 @@ namespace PwTouchInputProvider
             if (Global.DeveloperMode)
                 camera.SignalToStop();
         }
+        /// <summary>Detector will be restarted on next frame.</summary>
         public void RestartDetector()
         {
             restartDetector = true;
         }
 
+        Bitmap frame;
         void VideoSource_NewFrame(object sender, AForge.Video.NewFrameEventArgs eventArgs)
         {
-            Bitmap frame = (Bitmap)eventArgs.Frame.Clone();
-
-            if (detector == null || restartDetector)
+            frame = (Bitmap)eventArgs.Frame.Clone();
+            
+            if (detector == null || tracker == null || restartDetector)
             {
                 detector = new Detector1((Bitmap)frame.Clone());
+                tracker = new Tracker1();
                 restartDetector = false;
                 return;
             }
 
             detector.ProcessFrame(ref frame);
 
-            if (DrawBlobMarkers)
+            IEnumerable<Rectangle> blobs = detector.GetBlobRectangles();
+
+            blobs = tracker.ProcessBlobs(blobs);
+
+            foreach (Rectangle r in blobs)
             {
-                foreach (Rectangle r in Detector.GetBlobRectangles())
+                if (DrawBlobMarkers)
                 {
                     Graphics g = Graphics.FromImage(frame);
                     g.DrawRectangle(Pens.Yellow, r);
                 }
+
+                contacts.Enqueue(new Contact(0, ContactState.New, new System.Windows.Point(r.X, r.Y), r.Width, r.Height));
             }
 
             if(OnProcessed != null)

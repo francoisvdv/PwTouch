@@ -49,6 +49,8 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.nudSkipFrames = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -57,6 +59,7 @@
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSkipFrames)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -73,6 +76,8 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.White;
+            this.tabPage1.Controls.Add(this.label4);
+            this.tabPage1.Controls.Add(this.nudSkipFrames);
             this.tabPage1.Controls.Add(this.cbCameraMode);
             this.tabPage1.Controls.Add(this.cbCamera);
             this.tabPage1.Controls.Add(this.btnRestartDetector);
@@ -176,7 +181,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(3, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(625, 488);
+            this.groupBox2.Size = new System.Drawing.Size(659, 488);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Filters";
@@ -184,7 +189,7 @@
             // btnRemove
             // 
             this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemove.Location = new System.Drawing.Point(544, 62);
+            this.btnRemove.Location = new System.Drawing.Point(578, 62);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(75, 23);
             this.btnRemove.TabIndex = 9;
@@ -194,7 +199,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(466, 62);
+            this.btnSave.Location = new System.Drawing.Point(500, 62);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(72, 23);
             this.btnSave.TabIndex = 8;
@@ -206,7 +211,7 @@
             this.cbFilterGroups.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cbFilterGroups.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbFilterGroups.FormattingEnabled = true;
-            this.cbFilterGroups.Location = new System.Drawing.Point(466, 35);
+            this.cbFilterGroups.Location = new System.Drawing.Point(500, 35);
             this.cbFilterGroups.Name = "cbFilterGroups";
             this.cbFilterGroups.Size = new System.Drawing.Size(153, 21);
             this.cbFilterGroups.TabIndex = 7;
@@ -229,14 +234,14 @@
             this.lbFilters.FormattingEnabled = true;
             this.lbFilters.Location = new System.Drawing.Point(6, 35);
             this.lbFilters.Name = "lbFilters";
-            this.lbFilters.Size = new System.Drawing.Size(454, 418);
+            this.lbFilters.Size = new System.Drawing.Size(488, 418);
             this.lbFilters.TabIndex = 4;
             // 
             // propertyGrid1
             // 
             this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.propertyGrid1.Location = new System.Drawing.Point(466, 101);
+            this.propertyGrid1.Location = new System.Drawing.Point(500, 101);
             this.propertyGrid1.Name = "propertyGrid1";
             this.propertyGrid1.Size = new System.Drawing.Size(153, 383);
             this.propertyGrid1.TabIndex = 5;
@@ -248,7 +253,7 @@
             this.groupBox1.Controls.Add(this.pictureBox3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.groupBox1.Location = new System.Drawing.Point(628, 3);
+            this.groupBox1.Location = new System.Drawing.Point(662, 3);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(161, 488);
             this.groupBox1.TabIndex = 7;
@@ -289,6 +294,23 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Resultaat:";
             // 
+            // nudSkipFrames
+            // 
+            this.nudSkipFrames.Location = new System.Drawing.Point(751, 157);
+            this.nudSkipFrames.Name = "nudSkipFrames";
+            this.nudSkipFrames.Size = new System.Drawing.Size(69, 20);
+            this.nudSkipFrames.TabIndex = 8;
+            this.nudSkipFrames.ValueChanged += new System.EventHandler(this.nudSkipFrames_ValueChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(652, 159);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(93, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Frames overslaan:";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -301,6 +323,7 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
@@ -309,6 +332,7 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSkipFrames)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -336,6 +360,8 @@
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cbCameraMode;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown nudSkipFrames;
 
 
     }

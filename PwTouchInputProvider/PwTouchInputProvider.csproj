@@ -91,6 +91,8 @@
     <Compile Include="InputProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Tracker1.cs" />
+    <Compile Include="TrackerBase.cs" />
     <None Include="Voorbeeld.cs" />
   </ItemGroup>
   <ItemGroup>

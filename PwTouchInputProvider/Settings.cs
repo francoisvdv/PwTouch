@@ -165,5 +165,16 @@ namespace PwTouchInputProvider
             }
             set { SetValue("CameraMode", value.ToString()); }
         }
+
+        public int SkipFrames
+        {
+            get
+            {
+                int i;
+                int.TryParse(GetValue("SkipFrames", "0"), out i);
+                return i;
+            }
+            set { SetValue("SkipFrames", value.ToString()); }
+        }
     }
 }
