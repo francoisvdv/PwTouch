@@ -6,8 +6,11 @@ using System.Drawing;
 
 namespace PwTouchInputProvider
 {
-    public abstract class TrackerBase
+    public class Blob
     {
-        public abstract List<Blob> ProcessBlobs(IEnumerable<Rectangle> newBlobs);
+        public long Id { get; set; }
+        public Rectangle Rect { get; set; }
+
+        public bool Active { get; set; }
     }
 }

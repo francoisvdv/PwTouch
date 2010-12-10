@@ -8,9 +8,59 @@ namespace PwTouchInputProvider
 {
     public class Tracker1 : TrackerBase
     {
-        public override List<Rectangle> ProcessBlobs(IEnumerable<Rectangle> blobs)
+        List<Blob> currentBlobs;
+
+        public Tracker1()
         {
-            return new List<Rectangle>(blobs);
+            currentBlobs = new List<Blob>();
+        }
+
+        public override List<Blob> ProcessBlobs(IEnumerable<Rectangle> newBlobs)
+        {
+            foreach (Blob blob in currentBlobs)
+                blob.Active = false;
+
+            bool blobTracked = false;
+            foreach (Rectangle newBlob in newBlobs)
+            {
+                blobTracked = false;
+                foreach (Blob prevBlob in currentBlobs)
+                {
+                    if (prevBlob.Rect.IntersectsWith(newBlob))
+                    {
+                        //We've found a previous blob that overlaps with a new one, so we consider them the same.
+                        prevBlob.Rect = newBlob;
+                        prevBlob.Active = true;
+                        blobTracked = true;
+                        break;
+                    }
+                }
+
+                if (!blobTracked)
+                {
+                    //We've found a new blob
+                    Blob blob = new Blob()
+                    {
+                        Rect = newBlob,
+                        Active = true,
+                        Id = DateTime.Now.Ticks,
+                    };
+                    currentBlobs.Add(blob);
+                }
+            }
+
+            for (int i = 0; i < currentBlobs.Count; i++)
+            {
+                if (!currentBlobs[i].Active)
+                {
+                    currentBlobs.RemoveAt(i);
+
+                    if (i > 0)
+                        i--;
+                }
+            }
+
+            return currentBlobs;
         }
     }
 }

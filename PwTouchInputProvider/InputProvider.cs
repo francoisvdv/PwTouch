@@ -138,17 +138,17 @@ namespace PwTouchInputProvider
 
             IEnumerable<Rectangle> blobs = detector.GetBlobRectangles();
 
-            blobs = tracker.ProcessBlobs(blobs);
+            List<Blob> trackedBlobs = tracker.ProcessBlobs(blobs);
 
-            foreach (Rectangle r in blobs)
+            foreach (Blob blob in trackedBlobs)
             {
                 if (DrawBlobMarkers)
                 {
                     Graphics g = Graphics.FromImage(frame);
-                    g.DrawRectangle(Pens.Yellow, r);
+                    g.DrawRectangle(Pens.Yellow, blob.Rect);
                 }
 
-                contacts.Enqueue(new Contact(0, ContactState.New, new System.Windows.Point(r.X, r.Y), r.Width, r.Height));
+                contacts.Enqueue(new Contact(0, ContactState.New, new System.Windows.Point(blob.Rect.X, blob.Rect.Y), blob.Rect.Width, blob.Rect.Height));
             }
 
             if(OnProcessed != null)

@@ -37,13 +37,6 @@
             this.btnCameraSettings = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.btnRemove = new System.Windows.Forms.Button();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.cbFilterGroups = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.lbFilters = new System.Windows.Forms.ListBox();
-            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -51,11 +44,14 @@
             this.label2 = new System.Windows.Forms.Label();
             this.nudSkipFrames = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
+            this.cbSave = new System.Windows.Forms.Button();
+            this.cbDelete = new System.Windows.Forms.Button();
+            this.cbDetector = new System.Windows.Forms.ComboBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabPage2.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -161,90 +157,17 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.White;
-            this.tabPage2.Controls.Add(this.groupBox2);
+            this.tabPage2.Controls.Add(this.panel1);
+            this.tabPage2.Controls.Add(this.cbDetector);
+            this.tabPage2.Controls.Add(this.cbDelete);
+            this.tabPage2.Controls.Add(this.cbSave);
             this.tabPage2.Controls.Add(this.groupBox1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(826, 494);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Filters";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.btnRemove);
-            this.groupBox2.Controls.Add(this.btnSave);
-            this.groupBox2.Controls.Add(this.cbFilterGroups);
-            this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.lbFilters);
-            this.groupBox2.Controls.Add(this.propertyGrid1);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2.Location = new System.Drawing.Point(3, 3);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(659, 488);
-            this.groupBox2.TabIndex = 8;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Filters";
-            // 
-            // btnRemove
-            // 
-            this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemove.Location = new System.Drawing.Point(578, 62);
-            this.btnRemove.Name = "btnRemove";
-            this.btnRemove.Size = new System.Drawing.Size(75, 23);
-            this.btnRemove.TabIndex = 9;
-            this.btnRemove.Text = "Verwijder";
-            this.btnRemove.UseVisualStyleBackColor = true;
-            // 
-            // btnSave
-            // 
-            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(500, 62);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(72, 23);
-            this.btnSave.TabIndex = 8;
-            this.btnSave.Text = "Opslaan";
-            this.btnSave.UseVisualStyleBackColor = true;
-            // 
-            // cbFilterGroups
-            // 
-            this.cbFilterGroups.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbFilterGroups.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbFilterGroups.FormattingEnabled = true;
-            this.cbFilterGroups.Location = new System.Drawing.Point(500, 35);
-            this.cbFilterGroups.Name = "cbFilterGroups";
-            this.cbFilterGroups.Size = new System.Drawing.Size(153, 21);
-            this.cbFilterGroups.TabIndex = 7;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 16);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(171, 13);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "Selecteer actieve filters (ctrl + klik):";
-            // 
-            // lbFilters
-            // 
-            this.lbFilters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbFilters.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lbFilters.FormattingEnabled = true;
-            this.lbFilters.Location = new System.Drawing.Point(6, 35);
-            this.lbFilters.Name = "lbFilters";
-            this.lbFilters.Size = new System.Drawing.Size(488, 418);
-            this.lbFilters.TabIndex = 4;
-            // 
-            // propertyGrid1
-            // 
-            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.propertyGrid1.Location = new System.Drawing.Point(500, 101);
-            this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(153, 383);
-            this.propertyGrid1.TabIndex = 5;
+            this.tabPage2.Text = "Detectors";
             // 
             // groupBox1
             // 
@@ -311,6 +234,42 @@
             this.label4.TabIndex = 9;
             this.label4.Text = "Frames overslaan:";
             // 
+            // cbSave
+            // 
+            this.cbSave.Location = new System.Drawing.Point(500, 4);
+            this.cbSave.Name = "cbSave";
+            this.cbSave.Size = new System.Drawing.Size(75, 23);
+            this.cbSave.TabIndex = 8;
+            this.cbSave.Text = "Opslaan";
+            this.cbSave.UseVisualStyleBackColor = true;
+            // 
+            // cbDelete
+            // 
+            this.cbDelete.Location = new System.Drawing.Point(581, 4);
+            this.cbDelete.Name = "cbDelete";
+            this.cbDelete.Size = new System.Drawing.Size(75, 23);
+            this.cbDelete.TabIndex = 9;
+            this.cbDelete.Text = "Verwijder";
+            this.cbDelete.UseVisualStyleBackColor = true;
+            // 
+            // cbDetector
+            // 
+            this.cbDetector.FormattingEnabled = true;
+            this.cbDetector.Location = new System.Drawing.Point(8, 6);
+            this.cbDetector.Name = "cbDetector";
+            this.cbDetector.Size = new System.Drawing.Size(486, 21);
+            this.cbDetector.TabIndex = 10;
+            // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Location = new System.Drawing.Point(8, 33);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(648, 453);
+            this.panel1.TabIndex = 11;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -326,8 +285,6 @@
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage2.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
@@ -347,13 +304,6 @@
         private System.Windows.Forms.Button btnCameraSettings;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button btnRemove;
-        private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.ComboBox cbFilterGroups;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ListBox lbFilters;
-        private System.Windows.Forms.PropertyGrid propertyGrid1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pictureBox2;
@@ -362,6 +312,10 @@
         private System.Windows.Forms.ComboBox cbCameraMode;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown nudSkipFrames;
+        private System.Windows.Forms.ComboBox cbDetector;
+        private System.Windows.Forms.Button cbDelete;
+        private System.Windows.Forms.Button cbSave;
+        private System.Windows.Forms.Panel panel1;
 
 
     }

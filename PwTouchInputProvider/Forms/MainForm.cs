@@ -4,6 +4,9 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using AForge.Video.DirectShow;
+using ICSharpCode.TextEditor;
+using ICSharpCode.TextEditor.Document;
+using System.Collections;
 
 namespace PwTouchInputProvider.Forms
 {
@@ -17,11 +20,19 @@ namespace PwTouchInputProvider.Forms
         public MainForm(InputProvider provider)
         {
             InitializeComponent();
+            AddScriptEditor();
 
             this.inputProvider = provider;
 
             SetUpCameras();
-            SetUpFilters();
+            SetUpDetectors();
+        }
+        void AddScriptEditor()
+        {
+            TextEditorControl t = new TextEditorControl();
+            t.Document.HighlightingStrategy = HighlightingManager.Manager.FindHighlighter("C#");
+            t.Dock = DockStyle.Fill;
+            panel1.Controls.Add(t);
         }
 
         void MainForm_Load(object sender, EventArgs e)
@@ -49,21 +60,9 @@ namespace PwTouchInputProvider.Forms
 
             nudSkipFrames.Value = Global.AppSettings.SkipFrames;
         }
-        void SetUpFilters()
+        void SetUpDetectors()
         {
-            foreach (Type t in Assembly.GetAssembly(typeof(AForge.Imaging.Filters.AdaptiveSmoothing)).GetTypes())
-            {
-                if ((t.Namespace != null && !t.Namespace.StartsWith("AForge.Imaging.Filters")) ||
-                    !t.IsClass || !t.IsPublic || t.IsNested || t.IsAbstract || t.IsCOMObject)
-                    continue;
 
-                filters.Add(t);
-            }
-
-            foreach (Type t in filters)
-            {
-                lbFilters.Items.Add(t.ToString());
-            }
         }
 
         public void SetFrame(ref Bitmap image)
