@@ -146,6 +146,7 @@ namespace PwTouchInputProvider
                 {
                     Graphics g = Graphics.FromImage(frame);
                     g.DrawRectangle(Pens.Yellow, blob.Rect);
+                    g.DrawString(blob.Id.ToString(), new Font("Arial", 10), Brushes.White, new PointF(blob.Rect.X, blob.Rect.Y));
                 }
 
                 contacts.Enqueue(new Contact(0, ContactState.New, new System.Windows.Point(blob.Rect.X, blob.Rect.Y), blob.Rect.Width, blob.Rect.Height));

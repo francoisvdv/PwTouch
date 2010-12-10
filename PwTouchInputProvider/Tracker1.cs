@@ -8,6 +8,8 @@ namespace PwTouchInputProvider
 {
     public class Tracker1 : TrackerBase
     {
+        List<long> availableIds = new List<long>() { 0 };
+
         List<Blob> currentBlobs;
 
         public Tracker1()
@@ -38,14 +40,19 @@ namespace PwTouchInputProvider
 
                 if (!blobTracked)
                 {
+                    if (availableIds.Count == 0)
+                        availableIds.Add(currentBlobs.Count);
+
                     //We've found a new blob
                     Blob blob = new Blob()
                     {
                         Rect = newBlob,
                         Active = true,
-                        Id = DateTime.Now.Ticks,
+                        Id = availableIds[0]
                     };
                     currentBlobs.Add(blob);
+
+                    availableIds.RemoveAt(0);
                 }
             }
 
@@ -53,8 +60,9 @@ namespace PwTouchInputProvider
             {
                 if (!currentBlobs[i].Active)
                 {
+                    availableIds.Add(currentBlobs[i].Id);
                     currentBlobs.RemoveAt(i);
-
+                    
                     if (i > 0)
                         i--;
                 }
