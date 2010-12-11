@@ -27,23 +27,12 @@ namespace PwTouchInputProvider
             blobCounter.ObjectsOrder = ObjectsOrder.None;
         }
 
-        int i = Global.AppSettings.SkipFrames;
-        public override void ProcessFrame(ref Bitmap frame)
+        public override void ProcessFrame(Bitmap frame, out Bitmap processed)
         {
-            if(i < Global.AppSettings.SkipFrames)
-            {
-                i++;
-                return;
-            }
-            else
-                i = 0;
-
-            Bitmap processed = (Bitmap)frame.Clone();
+            processed = (Bitmap)frame.Clone();
             processed = fSequence.Apply(frame);
 
             blobCounter.ProcessImage(processed);
-
-            processed.Dispose();
         }
     }
 }

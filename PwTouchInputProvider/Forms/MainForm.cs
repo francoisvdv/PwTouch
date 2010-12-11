@@ -17,6 +17,10 @@ namespace PwTouchInputProvider.Forms
         //Filters
         List<Type> filters = new List<Type>();
 
+        Bitmap cameraFrame;
+        Bitmap processedFrame;
+        Bitmap processedCameraFrame;
+
         public MainForm(InputProvider provider)
         {
             InitializeComponent();
@@ -38,14 +42,18 @@ namespace PwTouchInputProvider.Forms
         void MainForm_Load(object sender, EventArgs e)
         {
             this.inputProvider.DrawBlobMarkers = true;
-            this.inputProvider.OnProcessed += SetFrame;
+            this.inputProvider.OnCameraFrame += OnCameraFrame;
+            this.inputProvider.OnProcessedFrame += OnProcessedFrame;
+            this.inputProvider.OnProcessedCameraFrame += OnProcessedCameraFrame;
         }
         void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Global.AppSettings.Save();
 
             this.inputProvider.DrawBlobMarkers = false;
-            this.inputProvider.OnProcessed -= SetFrame;
+            this.inputProvider.OnCameraFrame -= OnCameraFrame;
+            this.inputProvider.OnProcessedFrame -= OnProcessedFrame;
+            this.inputProvider.OnProcessedCameraFrame -= OnProcessedCameraFrame;
         }
 
         //Load controls
@@ -65,9 +73,32 @@ namespace PwTouchInputProvider.Forms
 
         }
 
-        public void SetFrame(ref Bitmap image)
+        public void OnCameraFrame(Bitmap image)
         {
-            pictureBox1.Image = image;
+            if (cameraFrame != null)
+                cameraFrame.Dispose();
+
+            cameraFrame = image;
+
+            pbNewCameraFrame.Image = image;
+        }
+        public void OnProcessedFrame(Bitmap image)
+        {
+            if (processedFrame != null)
+                processedFrame.Dispose();
+
+            processedFrame = image;
+
+            pbProcessedFrame.Image = image;
+        }
+        public void OnProcessedCameraFrame(Bitmap image)
+        {
+            if (processedCameraFrame != null)
+                processedCameraFrame.Dispose();
+
+            processedCameraFrame = image;
+
+            pbProcessedCameraFrame.Image = image;
         }
 
         //Configuration controls

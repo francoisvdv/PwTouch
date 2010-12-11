@@ -19,6 +19,16 @@ namespace PwTouchInputProvider
 
         public virtual Rectangle[] GetBlobRectangles() { return blobCounter.GetObjectsRectangles(); }
 
-        public abstract void ProcessFrame(ref Bitmap frame);
+        Bitmap processed;
+        public void ProcessFrame(Bitmap frame)
+        {
+            if (processed != null)
+                processed.Dispose();
+
+            processed = null;
+
+            ProcessFrame(frame, out processed);
+        }
+        public abstract void ProcessFrame(Bitmap frame, out Bitmap processed);
     }
 }

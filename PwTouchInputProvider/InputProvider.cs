@@ -34,9 +34,18 @@ namespace PwTouchInputProvider
         }
         #endregion
 
-        public delegate void ProcessFrameDelegate(ref Bitmap frame);
-        public ProcessFrameDelegate OnProcessed;
+        //=================== EVENTS
+        public delegate void FrameDelegate(Bitmap frame);
+        /// <summary>Returns a copy of the new camera frame. Don't forget to dispose!</summary>
+        public FrameDelegate OnCameraFrame;
+        /// <summary>Returns a copy of the new processed frame. Don't forget to dispose!</summary>
+        public FrameDelegate OnProcessedFrame;
+        /// <summary>Returns a copy of the resulting frame. Don't forget to dispose!</summary>
+        public FrameDelegate OnProcessedCameraFrame;
 
+
+
+        //=================== FIELDS
         Queue<Contact> contacts = new Queue<Contact>();
         System.Timers.Timer timer;
 
@@ -44,11 +53,17 @@ namespace PwTouchInputProvider
         DetectorBase detector;
         TrackerBase tracker;
         bool restartDetector;
+        int skipFrames = Global.AppSettings.SkipFrames;
 
+
+
+        //=================== PROPERTIES
         public bool DrawBlobMarkers { get; set; }
         public VideoCaptureDevice Camera { get { return camera; } set { camera = value; } }
         public DetectorBase Detector { get { return detector; } set { detector = value; } }
         public TrackerBase Tracker { get { return tracker; } set { tracker = value; } }
+
+
 
         public InputProvider()
         {
@@ -122,10 +137,22 @@ namespace PwTouchInputProvider
         }
 
         Bitmap frame;
+        Bitmap processed;
         void VideoSource_NewFrame(object sender, AForge.Video.NewFrameEventArgs eventArgs)
         {
+            if (skipFrames < Global.AppSettings.SkipFrames)
+            {
+                skipFrames++;
+                return;
+            }
+            else
+                skipFrames = 0;
+
             frame = (Bitmap)eventArgs.Frame.Clone();
-            
+
+            if(OnCameraFrame != null)
+                OnCameraFrame((Bitmap)frame.Clone());
+
             if (detector == null || tracker == null || restartDetector)
             {
                 detector = new Detector1((Bitmap)frame.Clone());
@@ -134,12 +161,22 @@ namespace PwTouchInputProvider
                 return;
             }
 
-            detector.ProcessFrame(ref frame);
+            if (OnProcessedFrame != null)
+            {
+                detector.ProcessFrame(frame, out processed);
+
+                //Check again. We receive this NewFrame event on a different thread, 
+                //so the state of OnProcessedFrame might have changed.
+                if(OnProcessedFrame != null)
+                    OnProcessedFrame(processed);
+            }
+            else
+                detector.ProcessFrame(frame);
 
             IEnumerable<Rectangle> blobs = detector.GetBlobRectangles();
-
             List<Blob> trackedBlobs = tracker.ProcessBlobs(blobs);
 
+            //Draw rectangles to original camera frame
             foreach (Blob blob in trackedBlobs)
             {
                 if (DrawBlobMarkers)
@@ -152,8 +189,10 @@ namespace PwTouchInputProvider
                 contacts.Enqueue(new Contact(0, ContactState.New, new System.Windows.Point(blob.Rect.X, blob.Rect.Y), blob.Rect.Width, blob.Rect.Height));
             }
 
-            if(OnProcessed != null)
-                OnProcessed(ref frame);
+            if(OnProcessedCameraFrame != null)
+                OnProcessedCameraFrame((Bitmap)frame.Clone());
+
+            frame.Dispose();
         }
     }
 }
