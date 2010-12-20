@@ -176,5 +176,14 @@ namespace PwTouchInputProvider
             }
             set { SetValue("SkipFrames", value.ToString()); }
         }
+
+        public string DetectorName
+        {
+            get
+            {
+                return GetValue("DetectorName", "[default]");
+            }
+            set { SetValue("DetectorName", value.ToString()); }
+        }
     }
 }

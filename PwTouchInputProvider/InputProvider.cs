@@ -9,6 +9,10 @@ using AForge.Video.DirectShow;
 using Multitouch.Contracts;
 using PwTouchInputProvider;
 using PwTouchInputProvider.Forms;
+using System.Reflection;
+using System.IO;
+
+using Image = AForge.Imaging.Image;
 
 namespace PwTouchInputProvider
 {
@@ -52,13 +56,12 @@ namespace PwTouchInputProvider
         VideoCaptureDevice camera;
         DetectorBase detector;
         TrackerBase tracker;
-        bool restartDetector;
+        DetectorBase restartDetector;
         int skipFrames = Global.AppSettings.SkipFrames;
 
 
 
         //=================== PROPERTIES
-        public bool DrawBlobMarkers { get; set; }
         public VideoCaptureDevice Camera { get { return camera; } set { camera = value; } }
         public DetectorBase Detector { get { return detector; } set { detector = value; } }
         public TrackerBase Tracker { get { return tracker; } set { tracker = value; } }
@@ -67,10 +70,8 @@ namespace PwTouchInputProvider
 
         public InputProvider()
         {
-            if (camera == null)
-            {
-                camera = CameraManager.GetCamera(Global.AppSettings.Camera);
-            }
+            camera = CameraManager.GetCamera(Global.AppSettings.Camera);
+
             if (camera == null)
             {
                 camera = CameraManager.GetCamera(0);
@@ -78,7 +79,7 @@ namespace PwTouchInputProvider
             }
             if (camera == null)
             {
-                MessageBox.Show("Er is geen (standaard) camera gevonden. Dit configuratiescherm sluit nu.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Er is geen (standaard) camera gevonden.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 
                 return;
             }
@@ -130,14 +131,19 @@ namespace PwTouchInputProvider
             if (Global.DeveloperMode)
                 camera.SignalToStop();
         }
+
+
+        public void SetDetector(DetectorBase detector)
+        {
+            restartDetector = detector;
+        }
         /// <summary>Detector will be restarted on next frame.</summary>
         public void RestartDetector()
         {
-            restartDetector = true;
+            restartDetector = detector;
         }
 
         Bitmap frame;
-        Bitmap processed;
         void VideoSource_NewFrame(object sender, AForge.Video.NewFrameEventArgs eventArgs)
         {
             if (skipFrames < Global.AppSettings.SkipFrames)
@@ -149,48 +155,59 @@ namespace PwTouchInputProvider
                 skipFrames = 0;
 
             frame = (Bitmap)eventArgs.Frame.Clone();
-
+            
             if(OnCameraFrame != null)
-                OnCameraFrame((Bitmap)frame.Clone());
-
-            if (detector == null || tracker == null || restartDetector)
+                OnCameraFrame(Image.Clone(frame));
+            
+            if (detector == null || tracker == null || restartDetector != null)
             {
-                detector = new Detector1((Bitmap)frame.Clone());
+                if (restartDetector != null)
+                    detector = restartDetector;
+                else
+                    detector = DetectorManager.LoadDetectorWithoutExceptions(DetectorManager.DetectorDirectory + "\\" + Global.AppSettings.DetectorName + ".dll");
+
+                if (detector == null)
+                    detector = new Detector1();
+
+                detector.Initialize(Image.Clone(frame));
+
                 tracker = new Tracker1();
-                restartDetector = false;
-                return;
+                restartDetector = null;
             }
+
+            detector.ProcessFrame(ref frame);
 
             if (OnProcessedFrame != null)
+                OnProcessedFrame(Image.Clone(frame));
+
+            List<Blob> trackedBlobs = tracker.ProcessBlobs(detector.GetBlobRectangles());
+
+            Bitmap processedCameraFrame;
+            if (OnProcessedFrame != null)
             {
-                detector.ProcessFrame(frame, out processed);
-
-                //Check again. We receive this NewFrame event on a different thread, 
-                //so the state of OnProcessedFrame might have changed.
-                if(OnProcessedFrame != null)
-                    OnProcessedFrame(processed);
-            }
-            else
-                detector.ProcessFrame(frame);
-
-            IEnumerable<Rectangle> blobs = detector.GetBlobRectangles();
-            List<Blob> trackedBlobs = tracker.ProcessBlobs(blobs);
-
-            //Draw rectangles to original camera frame
-            foreach (Blob blob in trackedBlobs)
-            {
-                if (DrawBlobMarkers)
+                processedCameraFrame = frame.Clone(new Rectangle(0, 0, frame.Size.Width, frame.Size.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                Graphics g = Graphics.FromImage(processedCameraFrame);
+                Font idFont = new Font("Arial", 10);
+                
+                //Draw rectangles to original camera frame
+                foreach (Blob blob in trackedBlobs)
                 {
-                    Graphics g = Graphics.FromImage(frame);
                     g.DrawRectangle(Pens.Yellow, blob.Rect);
+
+                    g.FillRectangle(new SolidBrush(Color.FromArgb(150, Color.DarkRed)), 
+                        new Rectangle(blob.Rect.X, blob.Rect.Y, (int)g.MeasureString(blob.Id.ToString(), idFont).Width, (int)idFont.GetHeight()));
                     g.DrawString(blob.Id.ToString(), new Font("Arial", 10), Brushes.White, new PointF(blob.Rect.X, blob.Rect.Y));
                 }
 
-                contacts.Enqueue(new Contact(0, ContactState.New, new System.Windows.Point(blob.Rect.X, blob.Rect.Y), blob.Rect.Width, blob.Rect.Height));
+                if (OnProcessedCameraFrame != null) //this is a different thread, so it might have changed in the meantime (race condition)
+                    OnProcessedCameraFrame(processedCameraFrame);
             }
 
-            if(OnProcessedCameraFrame != null)
-                OnProcessedCameraFrame((Bitmap)frame.Clone());
+            foreach (Blob blob in trackedBlobs)
+            {
+                //TODO: pass blob coords over to multitouch library.
+                //contacts.Enqueue(new Contact(0, ContactState.New, new System.Windows.Point(blob.Rect.X, blob.Rect.Y), blob.Rect.Width, blob.Rect.Height));
+            }
 
             frame.Dispose();
         }

@@ -3,7 +3,7 @@ using AForge.Imaging.Filters;
 
 namespace PwTouchInputProvider
 {
-    public class Detector1 : DetectorBase
+    public class Detector : DetectorBase
     {
         public override void Initialize(Bitmap backgroundImage)
         {

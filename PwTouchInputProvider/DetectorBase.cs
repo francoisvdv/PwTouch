@@ -15,20 +15,23 @@ namespace PwTouchInputProvider
         protected FiltersSequence fSequence = new FiltersSequence();
         protected BlobCounter blobCounter = new BlobCounter();
 
-        public int SkipFrames { get; set; }
+        public bool Initialized { get; private set; }
+
+        public virtual void Initialize(Bitmap backgroundImage)
+        {
+            fSequence = new FiltersSequence();
+            blobCounter = new BlobCounter();
+
+            blobCounter.MinWidth = 10;
+            blobCounter.MinHeight = 10;
+            blobCounter.FilterBlobs = true;
+            blobCounter.ObjectsOrder = ObjectsOrder.None;
+
+            Initialized = true;
+        }
 
         public virtual Rectangle[] GetBlobRectangles() { return blobCounter.GetObjectsRectangles(); }
 
-        Bitmap processed;
-        public void ProcessFrame(Bitmap frame)
-        {
-            if (processed != null)
-                processed.Dispose();
-
-            processed = null;
-
-            ProcessFrame(frame, out processed);
-        }
-        public abstract void ProcessFrame(Bitmap frame, out Bitmap processed);
+        public abstract void ProcessFrame(ref Bitmap frame);
     }
 }
