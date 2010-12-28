@@ -3,6 +3,9 @@ using AForge.Imaging.Filters;
 
 namespace PwTouchInputProvider
 {
+    /// <summary>
+    /// The default detector. If a user-defined detector doesn't work, we revert to this one.
+    /// </summary>
     public class Detector1 : DetectorBase
     {
         public override void Initialize(Bitmap backgroundImage)

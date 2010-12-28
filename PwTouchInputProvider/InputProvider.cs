@@ -70,6 +70,17 @@ namespace PwTouchInputProvider
 
         public InputProvider()
         {
+            PipeServer.OnReceived += delegate(string msg)
+            {
+                if (msg == "OpenConfiguration")
+                {
+                    Application.EnableVisualStyles();
+
+                    new MainForm(this).Show();
+                }
+            };
+            PipeServer.Start();
+
             camera = CameraManager.GetCamera(Global.AppSettings.Camera);
 
             if (camera == null)
@@ -101,10 +112,11 @@ namespace PwTouchInputProvider
 
         void timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			EventHandler<NewFrameEventArgs> eventHandler = NewFrame;
-			if (eventHandler != null)
-				eventHandler(this, new NewFrameEventArgs(Stopwatch.GetTimestamp(), contacts, null));
+            return;
 
+            if(NewFrame != null)
+                NewFrame(this, new NewFrameEventArgs(Stopwatch.GetTimestamp(), contacts, null));
+            
             contacts.Clear();
 		}
 
@@ -175,7 +187,19 @@ namespace PwTouchInputProvider
                 restartDetector = null;
             }
 
-            detector.ProcessFrame(ref frame);
+            try
+            {
+                detector.ProcessFrame(ref frame);
+            }
+            catch(Exception exc)
+            {
+                if (detector.GetType() != typeof(Detector1))
+                    SetDetector(new Detector1());
+                else
+                    throw exc;
+
+                return;
+            }
 
             if (OnProcessedFrame != null)
                 OnProcessedFrame(Image.Clone(frame));
@@ -203,10 +227,19 @@ namespace PwTouchInputProvider
                     OnProcessedCameraFrame(processedCameraFrame);
             }
 
-            foreach (Blob blob in trackedBlobs)
+            if (NewFrame != null)
             {
-                //TODO: pass blob coords over to multitouch library.
-                //contacts.Enqueue(new Contact(0, ContactState.New, new System.Windows.Point(blob.Rect.X, blob.Rect.Y), blob.Rect.Width, blob.Rect.Height));
+                List<Contact> contacts = new List<Contact>();
+                foreach (Blob blob in trackedBlobs)
+                {
+                    //TODO: pass blob coords over to multitouch library.
+                    contacts.Add(blob.GetContact());
+                    //contacts.Enqueue(new Contact(0, ContactState.New, new System.Windows.Point(blob.Rect.X, blob.Rect.Y), blob.Rect.Width, blob.Rect.Height));
+                }
+                
+                NewFrame(this, new NewFrameEventArgs(Stopwatch.GetTimestamp(), contacts, null));
+
+                contacts.Clear();
             }
 
             frame.Dispose();

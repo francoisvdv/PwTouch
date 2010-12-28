@@ -126,7 +126,7 @@ namespace PwTouchInputProvider
                     xDoc.Save(fs);
                 }
             }
-            catch (Exception exc) { Console.WriteLine(exc.Message); }
+            catch (Exception exc) { Log.Write(exc.Message); }
         }
     }
 

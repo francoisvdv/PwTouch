@@ -8,7 +8,7 @@ namespace PwTouchInputProvider
 {
     public class Tracker1 : TrackerBase
     {
-        List<long> availableIds = new List<long>() { 0 };
+        List<int> availableIds = new List<int>() { 0 };
 
         List<Blob> currentBlobs;
 
@@ -19,6 +19,22 @@ namespace PwTouchInputProvider
 
         public override List<Blob> ProcessBlobs(IEnumerable<Rectangle> newBlobs)
         {
+            //Remove blobs that were, but are no longer active
+            for (int i = 0; i < currentBlobs.Count; i++)
+            {
+                if (!currentBlobs[i].Active && currentBlobs[i].LifeTime > 0)
+                {
+                    availableIds.Add(currentBlobs[i].Id);
+
+                    currentBlobs[i].LifeTime = 0;
+
+                    currentBlobs.RemoveAt(i);
+
+                    if (i > 0)
+                        i--;
+                }
+            }
+
             foreach (Blob blob in currentBlobs)
                 blob.Active = false;
 
@@ -33,6 +49,8 @@ namespace PwTouchInputProvider
                         //We've found a previous blob that overlaps with a new one, so we consider them the same.
                         prevBlob.Rect = newBlob;
                         prevBlob.Active = true;
+                        prevBlob.LifeTime++;
+
                         blobTracked = true;
                         break;
                     }
@@ -53,18 +71,6 @@ namespace PwTouchInputProvider
                     currentBlobs.Add(blob);
 
                     availableIds.RemoveAt(0);
-                }
-            }
-
-            for (int i = 0; i < currentBlobs.Count; i++)
-            {
-                if (!currentBlobs[i].Active)
-                {
-                    availableIds.Add(currentBlobs[i].Id);
-                    currentBlobs.RemoveAt(i);
-                    
-                    if (i > 0)
-                        i--;
                 }
             }
 
