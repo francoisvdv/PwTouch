@@ -13,29 +13,28 @@ namespace PwTouchInputProvider
 
         static AsyncCallback onReceive;
         static NamedPipeServerStream pipeServer;
-        static bool running;
 
-        public delegate void ReceivedDelegate(string msg);
+        public delegate void ReceivedDelegate(PipeClient.Command cmd);
         public static ReceivedDelegate OnReceived;
+
+        static PipeServer()
+        {
+            onReceive += Received;
+        }
 
         public static void Start()
         {
-            if (pipeServer == null)
-            {
-                PipeSecurity ps = new PipeSecurity();
-                PipeAccessRule par = new PipeAccessRule("Everyone", PipeAccessRights.ReadWrite, System.Security.AccessControl.AccessControlType.Allow);
-                ps.AddAccessRule(par);
+            if (pipeServer != null)
+                throw new InvalidOperationException("Server already started. First call Close.");
 
-                pipeServer = new NamedPipeServerStream(SERVERNAME, 
-                    PipeDirection.In, 1, PipeTransmissionMode.Message, PipeOptions.Asynchronous, 4096, 4096, ps);
+            PipeSecurity ps = new PipeSecurity();
+            PipeAccessRule par = new PipeAccessRule("Everyone", PipeAccessRights.ReadWrite, System.Security.AccessControl.AccessControlType.Allow);
+            ps.AddAccessRule(par);
 
-                onReceive += Received;
-            }
+            pipeServer = new NamedPipeServerStream(SERVERNAME, 
+                PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.Asynchronous, 4096, 4096, ps);
 
-            Log.Write("NamedPipeServerStream object created.");
-
-            // Wait for a client to connect
-            Log.Write("Waiting for client connection...");
+            Log.Write("NamedPipeServerStream object created, waiting for client connection...");
             pipeServer.BeginWaitForConnection(onReceive, new object());
         }
 
@@ -44,7 +43,8 @@ namespace PwTouchInputProvider
             if (pipeServer == null)
                 return;
 
-            pipeServer.EndWaitForConnection(null);
+            pipeServer.Dispose();
+            pipeServer = null;
         }
 
         static void Received(IAsyncResult result)
@@ -57,14 +57,21 @@ namespace PwTouchInputProvider
 
                 try
                 {
-                    using (StreamReader sr = new StreamReader(pipeServer))
+                    StreamReader sr = new StreamReader(pipeServer);
                     {
-                        // Display the read text to the console
                         string temp;
-                        while ((temp = sr.ReadLine()) != null)
+                        while (pipeServer.IsConnected && (temp = sr.ReadLine()) != null)
                         {
+                            Log.Write("Received: " + temp);
+
+                            PipeClient.Command cmd = PipeClient.Command.Stop;
+                            if (temp == "Start")
+                                cmd = PipeClient.Command.Start;
+                            else if (temp == "Stop")
+                                cmd = PipeClient.Command.Stop;
+
                             if (OnReceived != null)
-                                OnReceived(temp);
+                                OnReceived(cmd);
                         }
                     }
                 }
@@ -78,6 +85,34 @@ namespace PwTouchInputProvider
             else
             {
                 Log.Write("NAMED PIPE ERROR: AsyncWaitHandle timed out", true);
+            }
+
+            Stop();
+            Start();
+        }
+
+        public static void SendConfirmation()
+        {
+            if (pipeServer == null || !pipeServer.IsConnected)
+                return;
+
+            StreamWriter sw = new StreamWriter(pipeServer);
+            {
+                sw.AutoFlush = true;
+                sw.WriteLine("done");
+                pipeServer.WaitForPipeDrain();
+            }
+        }
+        public static void SendFailure()
+        {
+            if (pipeServer == null || !pipeServer.IsConnected)
+                return;
+
+            StreamWriter sw = new StreamWriter(pipeServer);
+            {
+                sw.AutoFlush = true;
+                sw.WriteLine("failed");
+                pipeServer.WaitForPipeDrain();
             }
         }
     }

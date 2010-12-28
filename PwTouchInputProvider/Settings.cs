@@ -79,6 +79,8 @@ namespace PwTouchInputProvider
             if (xDoc.DocumentElement == null || xDoc.DocumentElement.Name != "PwTouch")
                 return false;
 
+            dictionary.Clear();
+
             foreach (XmlElement xValue in xDoc.DocumentElement)
             {
                 if (xValue.Name != "value")

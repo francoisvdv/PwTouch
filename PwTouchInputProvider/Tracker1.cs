@@ -66,6 +66,7 @@ namespace PwTouchInputProvider
                     {
                         Rect = newBlob,
                         Active = true,
+                        LifeTime = 1,
                         Id = availableIds[0]
                     };
                     currentBlobs.Add(blob);

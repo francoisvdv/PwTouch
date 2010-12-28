@@ -319,6 +319,7 @@
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(834, 520);
             this.Controls.Add(this.splitContainer2);
+            this.DoubleBuffered = true;
             this.Name = "MainForm";
             this.Text = "PwTouchApp Configuratie";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);

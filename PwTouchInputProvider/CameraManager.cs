@@ -20,7 +20,19 @@ namespace PwTouchInputProvider
             if (devices.Count == 0 || index < 0 || index > devices.Count)
                 return null;
             
-            return new VideoCaptureDevice(devices[index].MonikerString);
+            VideoCaptureDevice vcd = new VideoCaptureDevice(devices[index].MonikerString);
+
+            //It takes a moment to fill the VideoCapabilities property (see AForge.NET VideoCaptureDevice.VideoCapabilities docs)
+            //Wait for a maximum of 5000 millisecs.
+            int i = 0;
+            while (vcd.VideoCapabilities == null && i < 5000)
+            {
+                System.Threading.Thread.Sleep(1);
+
+                i++;
+            }
+
+            return vcd;
         }
     }
 }

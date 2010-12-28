@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using AForge.Video.DirectShow;
 using Multitouch.Contracts;
 using PwTouchInputProvider;
-using PwTouchInputProvider.Forms;
 using System.Reflection;
 using System.IO;
 
@@ -51,13 +50,12 @@ namespace PwTouchInputProvider
 
         //=================== FIELDS
         Queue<Contact> contacts = new Queue<Contact>();
-        System.Timers.Timer timer;
 
         VideoCaptureDevice camera;
         DetectorBase detector;
         TrackerBase tracker;
         DetectorBase restartDetector;
-        int skipFrames = Global.AppSettings.SkipFrames;
+        int skipFrames;
 
 
 
@@ -69,20 +67,58 @@ namespace PwTouchInputProvider
 
 
         public InputProvider()
+            : this(true)
         {
-            PipeServer.OnReceived += delegate(string msg)
-            {
-                if (msg == "OpenConfiguration")
-                {
-                    Application.EnableVisualStyles();
 
-                    new MainForm(this).Show();
-                }
-            };
-            PipeServer.Start();
+        }
+
+        public InputProvider(bool startPipeServer)
+        {
+            if (startPipeServer)
+            {
+                PipeServer.OnReceived += delegate(PipeClient.Command cmd)
+                {
+                    if (cmd == PipeClient.Command.Stop)
+                    {
+                        Log.Write("Signaled to stop...");
+                        Stop();
+                        Log.Write("Stopped");
+                        PipeServer.SendConfirmation();
+                        Log.Write("Sent confirmation");
+                    }
+                    else if (cmd == PipeClient.Command.Start)
+                    {
+                        Log.Write("Signaled to restart...");
+                        Initialize();
+                        Start();
+                        Log.Write("Started");
+                        PipeServer.SendConfirmation();
+                        Log.Write("Sent confirmation");
+                    }
+                };
+                PipeServer.Start();
+            }
+
+            Initialize();
+        }
+
+        public void Initialize(bool loadAppSettings = true)
+        {
+            if (camera != null && camera.IsRunning)
+                Stop();
+
+            if(loadAppSettings)
+                Global.AppSettings.Load();
 
             camera = CameraManager.GetCamera(Global.AppSettings.Camera);
-
+            if (camera != null)
+            {
+                if (Global.AppSettings.CameraMode < camera.VideoCapabilities.Length)
+                {
+                    camera.DesiredFrameSize = camera.VideoCapabilities[Global.AppSettings.CameraMode].FrameSize;
+                    camera.DesiredFrameRate = camera.VideoCapabilities[Global.AppSettings.CameraMode].MaxFrameRate;
+                }
+            }
             if (camera == null)
             {
                 camera = CameraManager.GetCamera(0);
@@ -90,60 +126,40 @@ namespace PwTouchInputProvider
             }
             if (camera == null)
             {
-                MessageBox.Show("Er is geen (standaard) camera gevonden.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                
-                return;
+                MessageBox.Show("Er is geen (standaard) camera gevonden. Driver wordt nu afgesloten.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                Application.Exit();
             }
 
-            timer = new System.Timers.Timer(1000 / 60d);
-			timer.Elapsed += timer_Elapsed;
+            detector = null;
+            restartDetector = null;
+            tracker = null;
+
+            skipFrames = Global.AppSettings.SkipFrames;
         }
 
 		public void Start()
 		{
-            StartCamera();
-            timer.Start();
-		}
-		public void Stop()
-		{
-            StopCamera();
-			timer.Stop();
-		}
-
-        void timer_Elapsed(object sender, ElapsedEventArgs e)
-		{
-            return;
-
-            if(NewFrame != null)
-                NewFrame(this, new NewFrameEventArgs(Stopwatch.GetTimestamp(), contacts, null));
-            
-            contacts.Clear();
-		}
-
-        //Camera
-        public void StartCamera()
-        {
             if (camera == null)
                 return;
 
             camera.NewFrame += VideoSource_NewFrame;
 
-            if (!camera.IsRunning && Global.DeveloperMode)
+            if (!camera.IsRunning)
                 camera.Start();
 
             RestartDetector();
-        }
-        public void StopCamera()
-        {
+		}
+		public void Stop()
+		{
             if (camera == null || !camera.IsRunning)
                 return;
 
             camera.NewFrame -= VideoSource_NewFrame;
 
-            if (Global.DeveloperMode)
-                camera.SignalToStop();
-        }
-
+            camera.SignalToStop();
+            camera.WaitForStop();
+		}
 
         public void SetDetector(DetectorBase detector)
         {

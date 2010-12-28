@@ -26,11 +26,16 @@ namespace PwTouchInputProvider.Forms
         Bitmap processedFrame;
         Bitmap processedCameraFrame;
 
-        public MainForm(InputProvider provider)
+        public MainForm()
         {
-            InitializeComponent();
+            inputProvider = new InputProvider(false);
+            inputProvider.Initialize();
+            if (inputProvider.Camera == null)
+                return;
 
-            this.inputProvider = provider;
+            inputProvider.Start();
+
+            InitializeComponent();
 
             SetUpCameras();
             SetUpDetectors();
@@ -47,12 +52,14 @@ namespace PwTouchInputProvider.Forms
         {
             Global.AppSettings.Save();
 
+            inputProvider.Stop();
+
             this.inputProvider.OnCameraFrame -= OnCameraFrame;
             this.inputProvider.OnProcessedFrame -= OnProcessedFrame;
             this.inputProvider.OnProcessedCameraFrame -= OnProcessedCameraFrame;
         }
 
-        //Load controls
+        //Load
         void SetUpCameras()
         {
             foreach (FilterInfo fi in CameraManager.GetCameras())
@@ -137,10 +144,15 @@ namespace PwTouchInputProvider.Forms
         }
         void cbCamera_SelectedIndexChanged(object sender, EventArgs e)
         {
-            inputProvider.StopCamera();
-            inputProvider.Camera = CameraManager.GetCamera(cbCamera.SelectedIndex);
+            if (Global.AppSettings.Camera != cbCamera.SelectedIndex)
+            {
+                Global.AppSettings.CameraMode = 0;
+                Global.AppSettings.Camera = cbCamera.SelectedIndex;
 
-            Global.AppSettings.Camera = cbCamera.SelectedIndex;
+                inputProvider.Stop();
+                inputProvider.Initialize(false);
+                inputProvider.Start();
+            }
 
             cbCameraMode.Items.Clear();
 
@@ -149,22 +161,23 @@ namespace PwTouchInputProvider.Forms
                 cbCameraMode.Items.Add(vc.FrameSize.Width + " x " + vc.FrameSize.Height + " @ " + vc.MaxFrameRate + "Hz");
             }
 
-            cbCameraMode.SelectedIndex = Global.AppSettings.CameraMode;
+            if (Global.AppSettings.CameraMode > cbCameraMode.Items.Count)
+                Global.AppSettings.CameraMode = 0;
 
-            inputProvider.StartCamera();
+            cbCameraMode.SelectedIndex = Global.AppSettings.CameraMode;
         }
         void cbCameraMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            inputProvider.Camera.Stop();
-            inputProvider.Camera.DesiredFrameSize = inputProvider.Camera.VideoCapabilities[cbCameraMode.SelectedIndex].FrameSize;
-            inputProvider.Camera.DesiredFrameRate = inputProvider.Camera.VideoCapabilities[cbCameraMode.SelectedIndex].MaxFrameRate;
-            inputProvider.Camera.Start();
+            if (Global.AppSettings.CameraMode != cbCameraMode.SelectedIndex)
+            {
+                Global.AppSettings.CameraMode = cbCameraMode.SelectedIndex;
 
-            Global.AppSettings.CameraMode = cbCameraMode.SelectedIndex;
+                nudSkipFrames.Maximum = inputProvider.Camera.VideoCapabilities[cbCameraMode.SelectedIndex].MaxFrameRate;
 
-            nudSkipFrames.Maximum = inputProvider.Camera.VideoCapabilities[cbCameraMode.SelectedIndex].MaxFrameRate;
-
-            inputProvider.RestartDetector();
+                inputProvider.Stop();
+                inputProvider.Initialize(false);
+                inputProvider.Start();
+            }
         }
 
         private void nudSkipFrames_ValueChanged(object sender, EventArgs e)
@@ -180,7 +193,7 @@ namespace PwTouchInputProvider.Forms
                 return;
             }
 
-            string s = rtbScript.Document.TextContent;
+            string s = rtbScript.Text;
 
             try
             {
@@ -242,17 +255,17 @@ namespace PwTouchInputProvider.Forms
             if(cbDetector.Items.Contains(cbDetector.Text))
                 cbDetector.Items.RemoveAt(cbDetector.SelectedIndex);
 
-            rtbScript.Document.TextContent = "";
+            rtbScript.Text = "";
         }
         private void cbDetector_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbDetector.Text == "Nieuwe detector...")
             {
-                rtbScript.Document.TextContent = DetectorManager.GetDefaultScript();
+                rtbScript.Text = DetectorManager.GetDefaultScript();
                 return;
             }
 
-            rtbScript.Document.TextContent = DetectorManager.GetScript(cbDetector.Text);
+            rtbScript.Text = DetectorManager.GetScript(cbDetector.Text);
 
             DetectorBase detector = null;
             try
