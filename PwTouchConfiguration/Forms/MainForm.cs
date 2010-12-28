@@ -38,7 +38,6 @@ namespace PwTouchInputProvider.Forms
             InitializeComponent();
 
             SetUpCameras();
-            SetUpDetectors();
             SetUpScriptEditor();
         }
 
@@ -70,10 +69,6 @@ namespace PwTouchInputProvider.Forms
             cbCamera.SelectedIndex = Global.AppSettings.Camera;
 
             nudSkipFrames.Value = Global.AppSettings.SkipFrames;
-        }
-        void SetUpDetectors()
-        {
-
         }
         void SetUpScriptEditor()
         {

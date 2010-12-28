@@ -22,7 +22,7 @@ namespace PwTouchInputProvider
 
         public static string DetectorDirectory
         {
-            get { return System.Windows.Forms.Application.StartupPath + "\\DetectorScripts\\"; }
+            get { return Global.AppDataFolder + @"\DetectorScripts\"; }
         }
 
         public static DetectorBase LoadDetectorWithoutExceptions(string assemblyPath)

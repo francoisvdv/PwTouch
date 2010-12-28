@@ -8,7 +8,7 @@ namespace PwTouchInputProvider
 {
     public static class Log
     {
-        public static readonly string FilePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"/PwTouchAppInputProvider/Log.txt";
+        public static readonly string FilePath = Global.AppDataFolder + @"\Log.txt";
 
         public static void Write(string msg, bool writeToFile = false)
         {

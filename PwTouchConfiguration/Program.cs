@@ -16,13 +16,9 @@ namespace PwTouchConfiguration
         {
             Application.EnableVisualStyles();
 
-#if !DEBUG
             if (!PipeClient.SendMessage(PipeClient.Command.Stop))
-            {
-                MessageBox.Show("Kon driver niet pauzeren. Staat de driver aan?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-#endif
+                Log.Write("Couldn't stop driver, it probably isn't running.");
+
             try
             {
                 Application.Run(new MainForm());
@@ -37,13 +33,8 @@ namespace PwTouchConfiguration
 #endif
             }
 
-#if !DEBUG
             if (!PipeClient.SendMessage(PipeClient.Command.Start))
-            {
-                MessageBox.Show("Kon driver niet hervatten. Probeer de driver handmatig te starten.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-#endif
+                Log.Write("Couldn't restart driver, it probably isn't running.");
         }
 
     }

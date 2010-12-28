@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CEBA6E1B-78B9-46EA-9A06-DE53DCDB59C0}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PwTouchConfiguration</RootNamespace>
     <AssemblyName>PwTouchConfiguration</AssemblyName>

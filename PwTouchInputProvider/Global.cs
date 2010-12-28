@@ -8,11 +8,8 @@ namespace PwTouchInputProvider
     {
         public const bool DeveloperMode = true;
 
-        public static readonly AppSettings AppSettings = new AppSettings(System.Windows.Forms.Application.StartupPath + "//Settings.xml");
+        public static readonly string AppDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\PwTouchAppInputProvider\";
 
-        static Global()
-        {
-            AppSettings.Load();
-        }
+        public static readonly AppSettings AppSettings = new AppSettings(AppDataFolder + @"\Settings.xml");
     }
 }
