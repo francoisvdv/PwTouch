@@ -252,19 +252,20 @@ namespace PwTouchInputProvider
             {
                 processedCameraFrame = frame.Clone(new Rectangle(0, 0, frame.Size.Width, frame.Size.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 Graphics g = Graphics.FromImage(processedCameraFrame);
-                Font idFont = new Font("Arial", 10);
+
+                Font idFont = new Font("Arial", processedCameraFrame.Width / 20);
                 
                 //Draw rectangles to original camera frame
                 foreach (Blob blob in trackedBlobs)
                 {
                     if (!blob.Active)
                         continue;
-
+                    
                     g.DrawRectangle(Pens.Yellow, blob.Rect);
 
                     g.FillRectangle(new SolidBrush(Color.FromArgb(150, Color.DarkRed)), 
                         new Rectangle(blob.Rect.X, blob.Rect.Y, (int)g.MeasureString(blob.Id.ToString(), idFont).Width, (int)idFont.GetHeight()));
-                    g.DrawString(blob.Id.ToString(), new Font("Arial", 10), Brushes.White, new PointF(blob.Rect.X, blob.Rect.Y));
+                    g.DrawString(blob.Id.ToString(), idFont, Brushes.White, new PointF(blob.Rect.X, blob.Rect.Y));
                 }
 
                 if (OnProcessedCameraFrame != null) //this is a different thread, so it might have changed in the meantime (race condition)
