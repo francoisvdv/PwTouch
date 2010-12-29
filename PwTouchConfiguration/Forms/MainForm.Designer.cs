@@ -232,7 +232,7 @@
             this.btnRestartDetector.Name = "btnRestartDetector";
             this.btnRestartDetector.Size = new System.Drawing.Size(168, 23);
             this.btnRestartDetector.TabIndex = 19;
-            this.btnRestartDetector.Text = "Detector Herstarten";
+            this.btnRestartDetector.Text = "Herstarten";
             this.btnRestartDetector.UseVisualStyleBackColor = true;
             this.btnRestartDetector.Click += new System.EventHandler(this.btnRestartDetector_Click);
             // 

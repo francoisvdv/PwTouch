@@ -46,6 +46,8 @@ namespace PwTouchInputProvider
         /// <summary>Returns a copy of the resulting frame. Don't forget to dispose!</summary>
         public FrameDelegate OnProcessedCameraFrame;
 
+        public delegate void BlobsTrackedDelegate(List<Blob> blobs);
+        public BlobsTrackedDelegate OnBlobsTracked;
 
 
         //=================== FIELDS
@@ -56,6 +58,7 @@ namespace PwTouchInputProvider
         TrackerBase tracker;
         DetectorBase restartDetector;
         int skipFrames;
+        System.Timers.Timer timer;
 
 
 
@@ -74,26 +77,45 @@ namespace PwTouchInputProvider
 
         public InputProvider(bool startPipeServer)
         {
+            timer = new System.Timers.Timer(2000);
+            timer.Elapsed += delegate
+            {
+                foreach (Process p in Process.GetProcesses())
+                {
+                    if (p.ProcessName.Contains("PwTouchConfiguration"))
+                        return;
+                }
+
+                Log.Write("Timer elapsed and configuration process is terminated - InputProvider starting.");
+                Initialize();
+                Start();
+                Log.Write("Started");
+
+                timer.Stop();
+            };
+
             if (startPipeServer)
             {
                 PipeServer.OnReceived += delegate(PipeClient.Command cmd)
                 {
                     if (cmd == PipeClient.Command.Stop)
                     {
-                        Log.Write("Signaled to stop...");
                         Stop();
-                        Log.Write("Stopped");
+
                         PipeServer.SendConfirmation();
-                        Log.Write("Sent confirmation");
+                        Log.Write("Stopped, confirmation sent.");
+
+                        timer.Start();
                     }
                     else if (cmd == PipeClient.Command.Start)
                     {
-                        Log.Write("Signaled to restart...");
                         Initialize();
                         Start();
-                        Log.Write("Started");
+
                         PipeServer.SendConfirmation();
-                        Log.Write("Sent confirmation");
+                        Log.Write("Started, confirmation sent.");
+
+                        timer.Stop();
                     }
                 };
                 PipeServer.Start();
@@ -174,6 +196,9 @@ namespace PwTouchInputProvider
         Bitmap frame;
         void VideoSource_NewFrame(object sender, AForge.Video.NewFrameEventArgs eventArgs)
         {
+            if(OnCameraFrame != null)
+                OnCameraFrame(Image.Clone(eventArgs.Frame));
+
             if (skipFrames < Global.AppSettings.SkipFrames)
             {
                 skipFrames++;
@@ -183,10 +208,7 @@ namespace PwTouchInputProvider
                 skipFrames = 0;
 
             frame = (Bitmap)eventArgs.Frame.Clone();
-            
-            if(OnCameraFrame != null)
-                OnCameraFrame(Image.Clone(frame));
-            
+
             if (detector == null || tracker == null || restartDetector != null)
             {
                 if (restartDetector != null)
@@ -222,6 +244,9 @@ namespace PwTouchInputProvider
 
             List<Blob> trackedBlobs = tracker.ProcessBlobs(detector.GetBlobRectangles());
 
+            if (OnBlobsTracked != null)
+                OnBlobsTracked(trackedBlobs);
+
             Bitmap processedCameraFrame;
             if (OnProcessedFrame != null)
             {
@@ -232,6 +257,9 @@ namespace PwTouchInputProvider
                 //Draw rectangles to original camera frame
                 foreach (Blob blob in trackedBlobs)
                 {
+                    if (!blob.Active)
+                        continue;
+
                     g.DrawRectangle(Pens.Yellow, blob.Rect);
 
                     g.FillRectangle(new SolidBrush(Color.FromArgb(150, Color.DarkRed)), 
@@ -248,9 +276,7 @@ namespace PwTouchInputProvider
                 List<Contact> contacts = new List<Contact>();
                 foreach (Blob blob in trackedBlobs)
                 {
-                    //TODO: pass blob coords over to multitouch library.
                     contacts.Add(blob.GetContact());
-                    //contacts.Enqueue(new Contact(0, ContactState.New, new System.Windows.Point(blob.Rect.X, blob.Rect.Y), blob.Rect.Width, blob.Rect.Height));
                 }
                 
                 NewFrame(this, new NewFrameEventArgs(Stopwatch.GetTimestamp(), contacts, null));

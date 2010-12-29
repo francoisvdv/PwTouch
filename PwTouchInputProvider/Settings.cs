@@ -187,5 +187,41 @@ namespace PwTouchInputProvider
             }
             set { SetValue("DetectorName", value.ToString()); }
         }
+
+        public List<CalibrationPoint> CalibrationPoints
+        {
+            get
+            {
+                List<CalibrationPoint> r = new List<CalibrationPoint>();
+                int count;
+                int.TryParse(GetValue("CalibrationPoint_Count", "0"), out count);
+
+                for (int i = 0; i < count; i++)
+                {
+                    int imgX, imgY, scrnX, scrnY;
+                    if (!int.TryParse(GetValue(String.Format("CalibrationPoint_{0}_ImageX", i), "nothing"), out imgX) ||
+                        !int.TryParse(GetValue(String.Format("CalibrationPoint_{0}_ImageY", i), "nothing"), out imgY) ||
+                        !int.TryParse(GetValue(String.Format("CalibrationPoint_{0}_ScreenX", i), "nothing"), out scrnX) ||
+                        !int.TryParse(GetValue(String.Format("CalibrationPoint_{0}_ScreenY", i), "nothing"), out scrnY))
+                        continue;
+
+                    r.Add(new CalibrationPoint(imgX, imgY, scrnX, scrnY));
+                }
+
+                return r;
+            }
+            set
+            {
+                SetValue("CalibrationPoint_Count", value.Count.ToString());
+
+                for (int i = 0; i < value.Count; i++)
+                {
+                    SetValue(String.Format("CalibrationPoint_{0}_ImageX", i), value[i].ImageX.ToString());
+                    SetValue(String.Format("CalibrationPoint_{0}_ImageY", i), value[i].ImageY.ToString());
+                    SetValue(String.Format("CalibrationPoint_{0}_ScreenX", i), value[i].ScreenX.ToString());
+                    SetValue(String.Format("CalibrationPoint_{0}_ScreenY", i), value[i].ScreenY.ToString());
+                }
+            }
+        }
     }
 }

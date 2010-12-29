@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Blob.cs" />
+    <Compile Include="CalibrationPoint.cs" />
     <Compile Include="CameraManager.cs" />
     <Compile Include="Detector1.cs" />
     <Compile Include="DetectorManager.cs" />

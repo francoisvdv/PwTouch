@@ -22,10 +22,6 @@ namespace PwTouchInputProvider.Forms
         //Filters
         List<Type> filters = new List<Type>();
 
-        Bitmap cameraFrame;
-        Bitmap processedFrame;
-        Bitmap processedCameraFrame;
-
         public MainForm()
         {
             inputProvider = new InputProvider(false);
@@ -94,28 +90,22 @@ namespace PwTouchInputProvider.Forms
 
         public void OnCameraFrame(Bitmap image)
         {
-            if (cameraFrame != null)
-                cameraFrame.Dispose();
-
-            cameraFrame = image;
+            if (pbNewCameraFrame.Image != null)
+                pbNewCameraFrame.Image.Dispose();
 
             pbNewCameraFrame.Image = image;
         }
         public void OnProcessedFrame(Bitmap image)
         {
-            if (processedFrame != null)
-                processedFrame.Dispose();
-
-            processedFrame = image;
+            if (pbProcessedFrame.Image != null)
+                pbProcessedFrame.Image.Dispose();
 
             pbProcessedFrame.Image = image;
         }
         public void OnProcessedCameraFrame(Bitmap image)
         {
-            if (processedCameraFrame != null)
-                processedCameraFrame.Dispose();
-
-            processedCameraFrame = image;
+            if (pbProcessedCameraFrame.Image != null)
+                pbProcessedCameraFrame.Image.Dispose();
 
             pbProcessedCameraFrame.Image = image;
         }
@@ -134,7 +124,7 @@ namespace PwTouchInputProvider.Forms
         }
         void btnCalibrate_Click(object sender, EventArgs e)
         {
-            Calibration c = new Calibration();
+            Calibration c = new Calibration(inputProvider);
             c.ShowDialog();
         }
         void cbCamera_SelectedIndexChanged(object sender, EventArgs e)
@@ -175,12 +165,12 @@ namespace PwTouchInputProvider.Forms
             }
         }
 
-        private void nudSkipFrames_ValueChanged(object sender, EventArgs e)
+        void nudSkipFrames_ValueChanged(object sender, EventArgs e)
         {
             Global.AppSettings.SkipFrames = (int)nudSkipFrames.Value;
         }
 
-        private void cbSave_Click(object sender, EventArgs e)
+        void cbSave_Click(object sender, EventArgs e)
         {
             if (cbDetector.Text == "" || cbDetector.Text == "Nieuwe detector...")
             {
@@ -226,7 +216,7 @@ namespace PwTouchInputProvider.Forms
 
             cbDetector_SelectedIndexChanged(null, null);
         }
-        private void cbDelete_Click(object sender, EventArgs e)
+        void cbDelete_Click(object sender, EventArgs e)
         {
             if (cbDetector.Text == "" || cbDetector.Text == "Nieuwe detector...")
                 return;
@@ -252,7 +242,7 @@ namespace PwTouchInputProvider.Forms
 
             rtbScript.Text = "";
         }
-        private void cbDetector_SelectedIndexChanged(object sender, EventArgs e)
+        void cbDetector_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbDetector.Text == "Nieuwe detector...")
             {
