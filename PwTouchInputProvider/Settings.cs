@@ -198,14 +198,14 @@ namespace PwTouchInputProvider
 
                 for (int i = 0; i < count; i++)
                 {
-                    int imgX, imgY, scrnX, scrnY;
-                    if (!int.TryParse(GetValue(String.Format("CalibrationPoint_{0}_ImageX", i), "nothing"), out imgX) ||
-                        !int.TryParse(GetValue(String.Format("CalibrationPoint_{0}_ImageY", i), "nothing"), out imgY) ||
-                        !int.TryParse(GetValue(String.Format("CalibrationPoint_{0}_ScreenX", i), "nothing"), out scrnX) ||
-                        !int.TryParse(GetValue(String.Format("CalibrationPoint_{0}_ScreenY", i), "nothing"), out scrnY))
+                    int screenX, screenY, webcamX, webcamY;
+                    if (!int.TryParse(GetValue(String.Format("CalibrationPoint_{0}_ScreenX", i), "nothing"), out screenX) ||
+                        !int.TryParse(GetValue(String.Format("CalibrationPoint_{0}_ScreenY", i), "nothing"), out screenY) ||
+                        !int.TryParse(GetValue(String.Format("CalibrationPoint_{0}_WebcamX", i), "nothing"), out webcamX) ||
+                        !int.TryParse(GetValue(String.Format("CalibrationPoint_{0}_WebcamY", i), "nothing"), out webcamY))
                         continue;
 
-                    r.Add(new CalibrationPoint(imgX, imgY, scrnX, scrnY));
+                    r.Add(new CalibrationPoint(screenX, screenY, webcamX, webcamY));
                 }
 
                 return r;
@@ -216,10 +216,10 @@ namespace PwTouchInputProvider
 
                 for (int i = 0; i < value.Count; i++)
                 {
-                    SetValue(String.Format("CalibrationPoint_{0}_ImageX", i), value[i].ImageX.ToString());
-                    SetValue(String.Format("CalibrationPoint_{0}_ImageY", i), value[i].ImageY.ToString());
                     SetValue(String.Format("CalibrationPoint_{0}_ScreenX", i), value[i].ScreenX.ToString());
                     SetValue(String.Format("CalibrationPoint_{0}_ScreenY", i), value[i].ScreenY.ToString());
+                    SetValue(String.Format("CalibrationPoint_{0}_WebcamX", i), value[i].WebcamX.ToString());
+                    SetValue(String.Format("CalibrationPoint_{0}_WebcamY", i), value[i].WebcamY.ToString());
                 }
             }
         }

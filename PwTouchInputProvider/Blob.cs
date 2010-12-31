@@ -8,9 +8,11 @@ namespace PwTouchInputProvider
 {
     public class Blob
     {
+        /// <summary>The amount of frames this blob has been alive.</summary>
         public int LifeTime { get; set; }
         public int Id { get; set; }
         public Rectangle Rect { get; set; }
+        public Point Center { get { return new Point(Rect.X + (Rect.Width / 2), Rect.Y + (Rect.Height / 2)); } }
         public bool Active { get; set; }
         public Multitouch.Contracts.ContactState ContactState
         {
