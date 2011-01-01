@@ -171,13 +171,21 @@ namespace PwTouchInputProvider.Forms
 
         void OnBlobsTracked(List<Blob> blobs)
         {
+            if (!calibrating)
+                return;
+
             CalibrationPoint cp = GetCurrentCalibrationPoint();
 
             Blob closest = closestBlob;
             foreach (Blob b in blobs)
             {
                 if (!b.Active)
+                {
+                    if (b == closest)
+                        closest = null;
+
                     continue;
+                }
 
                 if (closest == null)
                 {
