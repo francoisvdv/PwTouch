@@ -65,6 +65,10 @@ namespace PwTouchInputProvider.Forms
             cbCamera.SelectedIndex = Global.AppSettings.Camera;
 
             nudSkipFrames.Value = Global.AppSettings.SkipFrames;
+
+            chkbBlobFilter.Checked = Global.AppSettings.FilterBlobs;
+            tbMinBlobSize.Text = Global.AppSettings.MinBlobSize.ToString();
+            tbMaxBlobSize.Text = Global.AppSettings.MaxBlobSize.ToString();
         }
         void SetUpScriptEditor()
         {
@@ -170,7 +174,7 @@ namespace PwTouchInputProvider.Forms
             Global.AppSettings.SkipFrames = (int)nudSkipFrames.Value;
         }
 
-        void cbSave_Click(object sender, EventArgs e)
+        void btnSave_Click(object sender, EventArgs e)
         {
             if (cbDetector.Text == "" || cbDetector.Text == "Nieuwe detector...")
             {
@@ -187,7 +191,7 @@ namespace PwTouchInputProvider.Forms
             catch (IOException exc)
             {
                 if (MessageBox.Show("Kon detector niet opslaan. Error:\r\n\r\n" + exc.ToString(), "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) == System.Windows.Forms.DialogResult.Retry)
-                    cbSave_Click(sender, e);
+                    btnSave_Click(sender, e);
 
                 return;
             }
@@ -216,7 +220,7 @@ namespace PwTouchInputProvider.Forms
 
             cbDetector_SelectedIndexChanged(null, null);
         }
-        void cbDelete_Click(object sender, EventArgs e)
+        void btnDelete_Click(object sender, EventArgs e)
         {
             if (cbDetector.Text == "" || cbDetector.Text == "Nieuwe detector...")
                 return;
@@ -241,6 +245,12 @@ namespace PwTouchInputProvider.Forms
                 cbDetector.Items.RemoveAt(cbDetector.SelectedIndex);
 
             rtbScript.Text = "";
+        }
+        void btnAforgeHelp_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            p.StartInfo.FileName = Application.StartupPath + @"\AForge.NET.chm";
+            p.Start();
         }
         void cbDetector_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -276,6 +286,40 @@ namespace PwTouchInputProvider.Forms
             inputProvider.SetDetector(detector);
 
             Global.AppSettings.DetectorName = cbDetector.Text;
+        }
+
+        void tbBlobSize_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            int isNumber = 0;
+            if(e.KeyChar != '\b')
+                e.Handled = !int.TryParse(e.KeyChar.ToString(), out isNumber);
+        }
+        void tbMinBlobSize_TextChanged(object sender, EventArgs e)
+        {
+            int a;
+            int.TryParse(tbMinBlobSize.Text, out a);
+            Global.AppSettings.MinBlobSize = a;
+
+            if (inputProvider != null && inputProvider.Detector != null)
+                inputProvider.Detector.BlobCounter.MinWidth =
+                inputProvider.Detector.BlobCounter.MinHeight = Global.AppSettings.MaxBlobSize;
+        }
+        void tbMaxBlobSize_TextChanged(object sender, EventArgs e)
+        {
+            int a;
+            int.TryParse(tbMaxBlobSize.Text, out a);
+            Global.AppSettings.MaxBlobSize = a;
+
+            if (inputProvider != null && inputProvider.Detector != null)
+                inputProvider.Detector.BlobCounter.MaxWidth =
+                inputProvider.Detector.BlobCounter.MaxHeight = Global.AppSettings.MaxBlobSize;
+        }
+        void chkbBlobFilter_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.AppSettings.FilterBlobs = chkbBlobFilter.Checked;
+
+            if(inputProvider != null && inputProvider.Detector != null)
+                inputProvider.Detector.BlobCounter.FilterBlobs = Global.AppSettings.FilterBlobs;
         }
     }
 }

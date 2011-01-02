@@ -179,6 +179,37 @@ namespace PwTouchInputProvider
             set { SetValue("SkipFrames", value.ToString()); }
         }
 
+        public bool FilterBlobs
+        {
+            get
+            {
+                bool i;
+                bool.TryParse(GetValue("FilterBlobs", "true"), out i);
+                return i;
+            }
+            set { SetValue("FilterBlobs", value.ToString()); }
+        }
+        public int MinBlobSize
+        {
+            get
+            {
+                int i;
+                int.TryParse(GetValue("MinBlobSize", "2"), out i);
+                return i;
+            }
+            set { SetValue("MinBlobSize", value.ToString()); }
+        }
+        public int MaxBlobSize
+        {
+            get
+            {
+                int i;
+                int.TryParse(GetValue("MaxBlobSize", "20"), out i);
+                return i;
+            }
+            set { SetValue("MaxBlobSize", value.ToString()); }
+        }
+
         public string DetectorName
         {
             get

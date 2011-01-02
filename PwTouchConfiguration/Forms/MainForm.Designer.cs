@@ -34,10 +34,19 @@
             this.pbProcessedCameraFrame = new System.Windows.Forms.PictureBox();
             this.pbNewCameraFrame = new System.Windows.Forms.PictureBox();
             this.pbProcessedFrame = new System.Windows.Forms.PictureBox();
+            this.btnAforgeHelp = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.cbDetector = new System.Windows.Forms.ComboBox();
-            this.cbSave = new System.Windows.Forms.Button();
-            this.cbDelete = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbMaxBlobSize = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tbMinBlobSize = new System.Windows.Forms.TextBox();
+            this.chkbBlobFilter = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnRestartDetector = new System.Windows.Forms.Button();
             this.btnCalibrate = new System.Windows.Forms.Button();
@@ -47,6 +56,7 @@
             this.cbCamera = new System.Windows.Forms.ComboBox();
             this.btnCameraSettings = new System.Windows.Forms.Button();
             this.cbCameraMode = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
@@ -57,6 +67,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbProcessedCameraFrame)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbNewCameraFrame)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbProcessedFrame)).BeginInit();
+            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSkipFrames)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -77,6 +88,7 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.BackColor = System.Drawing.Color.Transparent;
+            this.splitContainer2.Panel2.Controls.Add(this.groupBox3);
             this.splitContainer2.Panel2.Controls.Add(this.groupBox2);
             this.splitContainer2.Panel2.Controls.Add(this.groupBox1);
             this.splitContainer2.Size = new System.Drawing.Size(834, 520);
@@ -100,10 +112,11 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.BackColor = System.Drawing.Color.White;
+            this.splitContainer1.Panel2.Controls.Add(this.btnAforgeHelp);
             this.splitContainer1.Panel2.Controls.Add(this.panel1);
             this.splitContainer1.Panel2.Controls.Add(this.cbDetector);
-            this.splitContainer1.Panel2.Controls.Add(this.cbSave);
-            this.splitContainer1.Panel2.Controls.Add(this.cbDelete);
+            this.splitContainer1.Panel2.Controls.Add(this.btnSave);
+            this.splitContainer1.Panel2.Controls.Add(this.btnDelete);
             this.splitContainer1.Size = new System.Drawing.Size(641, 520);
             this.splitContainer1.SplitterDistance = 165;
             this.splitContainer1.SplitterWidth = 2;
@@ -166,6 +179,17 @@
             this.pbProcessedFrame.TabIndex = 2;
             this.pbProcessedFrame.TabStop = false;
             // 
+            // btnAforgeHelp
+            // 
+            this.btnAforgeHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAforgeHelp.Location = new System.Drawing.Point(561, 3);
+            this.btnAforgeHelp.Name = "btnAforgeHelp";
+            this.btnAforgeHelp.Size = new System.Drawing.Size(75, 23);
+            this.btnAforgeHelp.TabIndex = 12;
+            this.btnAforgeHelp.Text = "AForge";
+            this.btnAforgeHelp.UseVisualStyleBackColor = true;
+            this.btnAforgeHelp.Click += new System.EventHandler(this.btnAforgeHelp_Click);
+            // 
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -182,33 +206,117 @@
             this.cbDetector.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.cbDetector.FormattingEnabled = true;
-            this.cbDetector.Location = new System.Drawing.Point(3, 5);
+            this.cbDetector.Location = new System.Drawing.Point(3, 4);
             this.cbDetector.Name = "cbDetector";
-            this.cbDetector.Size = new System.Drawing.Size(471, 21);
+            this.cbDetector.Size = new System.Drawing.Size(390, 21);
             this.cbDetector.TabIndex = 10;
             this.cbDetector.SelectedIndexChanged += new System.EventHandler(this.cbDetector_SelectedIndexChanged);
             // 
-            // cbSave
+            // btnSave
             // 
-            this.cbSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbSave.Location = new System.Drawing.Point(480, 3);
-            this.cbSave.Name = "cbSave";
-            this.cbSave.Size = new System.Drawing.Size(75, 23);
-            this.cbSave.TabIndex = 8;
-            this.cbSave.Text = "Opslaan";
-            this.cbSave.UseVisualStyleBackColor = true;
-            this.cbSave.Click += new System.EventHandler(this.cbSave_Click);
+            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSave.Location = new System.Drawing.Point(399, 3);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 8;
+            this.btnSave.Text = "Opslaan";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // cbDelete
+            // btnDelete
             // 
-            this.cbDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbDelete.Location = new System.Drawing.Point(561, 3);
-            this.cbDelete.Name = "cbDelete";
-            this.cbDelete.Size = new System.Drawing.Size(75, 23);
-            this.cbDelete.TabIndex = 9;
-            this.cbDelete.Text = "Verwijder";
-            this.cbDelete.UseVisualStyleBackColor = true;
-            this.cbDelete.Click += new System.EventHandler(this.cbDelete_Click);
+            this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDelete.Location = new System.Drawing.Point(480, 3);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(75, 23);
+            this.btnDelete.TabIndex = 9;
+            this.btnDelete.Text = "Verwijder";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.label6);
+            this.groupBox3.Controls.Add(this.label5);
+            this.groupBox3.Controls.Add(this.label2);
+            this.groupBox3.Controls.Add(this.label3);
+            this.groupBox3.Controls.Add(this.tbMaxBlobSize);
+            this.groupBox3.Controls.Add(this.label1);
+            this.groupBox3.Controls.Add(this.tbMinBlobSize);
+            this.groupBox3.Controls.Add(this.chkbBlobFilter);
+            this.groupBox3.Location = new System.Drawing.Point(3, 234);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(183, 107);
+            this.groupBox3.TabIndex = 26;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Blob Filter";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(132, 65);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(33, 13);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "pixels";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(132, 39);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(33, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "pixels";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 65);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(54, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Maximaal:";
+            // 
+            // tbMaxBlobSize
+            // 
+            this.tbMaxBlobSize.Location = new System.Drawing.Point(63, 62);
+            this.tbMaxBlobSize.MaxLength = 4;
+            this.tbMaxBlobSize.Name = "tbMaxBlobSize";
+            this.tbMaxBlobSize.Size = new System.Drawing.Size(63, 20);
+            this.tbMaxBlobSize.TabIndex = 4;
+            this.tbMaxBlobSize.TextChanged += new System.EventHandler(this.tbMaxBlobSize_TextChanged);
+            this.tbMaxBlobSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbBlobSize_KeyPress);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 39);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(51, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Minimaal:";
+            // 
+            // tbMinBlobSize
+            // 
+            this.tbMinBlobSize.Location = new System.Drawing.Point(63, 36);
+            this.tbMinBlobSize.MaxLength = 4;
+            this.tbMinBlobSize.Name = "tbMinBlobSize";
+            this.tbMinBlobSize.Size = new System.Drawing.Size(63, 20);
+            this.tbMinBlobSize.TabIndex = 1;
+            this.tbMinBlobSize.TextChanged += new System.EventHandler(this.tbMinBlobSize_TextChanged);
+            this.tbMinBlobSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbBlobSize_KeyPress);
+            // 
+            // chkbBlobFilter
+            // 
+            this.chkbBlobFilter.AutoSize = true;
+            this.chkbBlobFilter.Location = new System.Drawing.Point(6, 19);
+            this.chkbBlobFilter.Name = "chkbBlobFilter";
+            this.chkbBlobFilter.Size = new System.Drawing.Size(84, 17);
+            this.chkbBlobFilter.TabIndex = 0;
+            this.chkbBlobFilter.Text = "Inschakelen";
+            this.chkbBlobFilter.UseVisualStyleBackColor = true;
+            this.chkbBlobFilter.CheckedChanged += new System.EventHandler(this.chkbBlobFilter_CheckedChanged);
             // 
             // groupBox2
             // 
@@ -312,6 +420,15 @@
             this.cbCameraMode.TabIndex = 21;
             this.cbCameraMode.SelectedIndexChanged += new System.EventHandler(this.cbCameraMode_SelectedIndexChanged);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 87);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(158, 13);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "Na wijziging detector herstarten.";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -334,6 +451,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbProcessedCameraFrame)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbNewCameraFrame)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbProcessedFrame)).EndInit();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSkipFrames)).EndInit();
@@ -352,8 +471,8 @@
         private System.Windows.Forms.PictureBox pbProcessedFrame;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ComboBox cbDetector;
-        private System.Windows.Forms.Button cbSave;
-        private System.Windows.Forms.Button cbDelete;
+        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown nudSkipFrames;
         private System.Windows.Forms.ComboBox cbCameraMode;
@@ -363,6 +482,16 @@
         private System.Windows.Forms.Button btnCameraSettings;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button btnAforgeHelp;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.CheckBox chkbBlobFilter;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox tbMinBlobSize;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tbMaxBlobSize;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
 
 
 

@@ -331,22 +331,19 @@ namespace PwTouchInputProvider
                 if (OnProcessedCameraFrame != null) //this is a different thread, so it might have changed in the meantime (race condition)
                     OnProcessedCameraFrame(processedCameraFrame);
             }
-#if !DEBUG
+
             if (NewFrame != null)
-#endif
             {
                 List<Contact> contacts = new List<Contact>();
                 foreach (Blob blob in trackedBlobs)
                 {
                     Point w2s = WebcamToScreen(blob);
-                    Console.WriteLine(w2s.ToString());
+                    //Console.WriteLine(w2s.ToString());
                     Contact c = new Contact(blob.Id, blob.ContactState, new System.Windows.Point(w2s.X, w2s.Y), blob.Rect.Width, blob.Rect.Height);
                     contacts.Add(c);
                 }
-                
-#if !DEBUG
+
                 NewFrame(this, new NewFrameEventArgs(Stopwatch.GetTimestamp(), contacts, null));
-#endif
                 contacts.Clear();
             }
 
