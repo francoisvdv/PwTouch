@@ -193,6 +193,66 @@ namespace PwTouchInputProvider
             restartDetector = detector;
         }
 
+        int FindY(CalibrationPoint cp1, CalibrationPoint cp2, int x)
+        {
+            //y = ax + b
+            //b = y - (ax)
+
+            float a = (cp2.WebcamY - cp1.WebcamY) / (cp2.WebcamX - cp1.WebcamX);
+            float b = cp1.WebcamY - a * cp1.WebcamX;
+
+            return (int)(a * x + b);
+        }
+        int FindX(CalibrationPoint cp1, CalibrationPoint cp2, int y)
+        {
+            //y = ax + b
+            //b = y - (ax)
+
+            //x = (y - b) / a
+
+            float a = (cp2.WebcamY - cp1.WebcamY) / (cp2.WebcamX - cp1.WebcamX);
+            float b = cp1.WebcamY - a * cp1.WebcamX;
+
+            return (int)((y - b) / a);
+        }
+
+        Point WebcamToScreen(Blob b)
+        {
+            List<CalibrationPoint> calibrationPoints = Global.AppSettings.CalibrationPoints;
+
+            if (calibrationPoints.Count == 0)
+                return b.Center;
+
+            float margin = calibrationPoints[0].ScreenX; //0.1f
+
+            float offsetX = 0;
+            offsetX -= margin + (calibrationPoints[0].ScreenX - calibrationPoints[0].WebcamX); //Move left
+            offsetX += margin + (calibrationPoints[1].ScreenX - calibrationPoints[1].WebcamX); //Move right
+
+            offsetX -= margin + (calibrationPoints[3].ScreenX - calibrationPoints[3].WebcamX); //Move left
+            offsetX += margin + (calibrationPoints[2].ScreenX - calibrationPoints[2].WebcamX); //Move right
+
+            float offsetY = 0;
+            offsetY -= margin + (calibrationPoints[0].ScreenY - calibrationPoints[0].WebcamY); //Move up
+            offsetY += margin + (calibrationPoints[1].ScreenY - calibrationPoints[1].WebcamY); //Move down
+
+            offsetY -= margin + (calibrationPoints[3].ScreenY - calibrationPoints[3].WebcamY); //Move up
+            offsetY += margin + (calibrationPoints[2].ScreenY - calibrationPoints[2].WebcamY); //Move down
+
+            //float aspectX = 1 + (float)Screen.PrimaryScreen.Bounds.Width % (float)Camera.DesiredFrameSize.Width / (float)Camera.DesiredFrameSize.Width;
+            //float aspectY = 1 + (float)Screen.PrimaryScreen.Bounds.Height % (float)Camera.DesiredFrameSize.Height / (float)Camera.DesiredFrameSize.Height;
+
+            //offsetX *= aspectX;
+
+            //Move left
+            //b.Rect = new Rectangle(
+
+            PointF relativeCenter = new PointF((float)b.Center.X / (float)Camera.DesiredFrameSize.Width, (float)b.Center.Y / (float)Camera.DesiredFrameSize.Height);
+
+            return new Point((int)(Screen.PrimaryScreen.Bounds.Width * (relativeCenter.X - offsetX)),
+                (int)(Screen.PrimaryScreen.Bounds.Height * (relativeCenter.Y - offsetY)));
+        }
+
         Bitmap frame;
         void VideoSource_NewFrame(object sender, AForge.Video.NewFrameEventArgs eventArgs)
         {
@@ -271,17 +331,22 @@ namespace PwTouchInputProvider
                 if (OnProcessedCameraFrame != null) //this is a different thread, so it might have changed in the meantime (race condition)
                     OnProcessedCameraFrame(processedCameraFrame);
             }
-
+#if !DEBUG
             if (NewFrame != null)
+#endif
             {
                 List<Contact> contacts = new List<Contact>();
                 foreach (Blob blob in trackedBlobs)
                 {
-                    contacts.Add(blob.GetContact());
+                    Point w2s = WebcamToScreen(blob);
+                    Console.WriteLine(w2s.ToString());
+                    Contact c = new Contact(blob.Id, blob.ContactState, new System.Windows.Point(w2s.X, w2s.Y), blob.Rect.Width, blob.Rect.Height);
+                    contacts.Add(c);
                 }
                 
+#if !DEBUG
                 NewFrame(this, new NewFrameEventArgs(Stopwatch.GetTimestamp(), contacts, null));
-
+#endif
                 contacts.Clear();
             }
 

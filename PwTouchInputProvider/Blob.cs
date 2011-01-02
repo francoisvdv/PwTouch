@@ -26,10 +26,5 @@ namespace PwTouchInputProvider
                     return Multitouch.Contracts.ContactState.Moved;
             }
         }
-
-        public Multitouch.Contracts.Contact GetContact()
-        {
-            return new Multitouch.Contracts.Contact(Id, ContactState, new System.Windows.Point(Rect.X + (Rect.Width / 2), Rect.Y + (Rect.Height / 2)), System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width, System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height);
-        }
     }
 }

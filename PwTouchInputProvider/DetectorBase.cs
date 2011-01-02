@@ -24,7 +24,7 @@ namespace PwTouchInputProvider
 
             blobCounter.MinWidth = 10;
             blobCounter.MinHeight = 10;
-            blobCounter.FilterBlobs = true;
+            blobCounter.FilterBlobs = false;
             blobCounter.ObjectsOrder = ObjectsOrder.None;
 
             Initialized = true;

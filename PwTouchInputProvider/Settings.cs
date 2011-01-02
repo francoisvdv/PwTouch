@@ -188,6 +188,7 @@ namespace PwTouchInputProvider
             set { SetValue("DetectorName", value.ToString()); }
         }
 
+        /// <summary>Clockwise from top-left.
         public List<CalibrationPoint> CalibrationPoints
         {
             get
@@ -198,11 +199,11 @@ namespace PwTouchInputProvider
 
                 for (int i = 0; i < count; i++)
                 {
-                    int screenX, screenY, webcamX, webcamY;
-                    if (!int.TryParse(GetValue(String.Format("CalibrationPoint_{0}_ScreenX", i), "nothing"), out screenX) ||
-                        !int.TryParse(GetValue(String.Format("CalibrationPoint_{0}_ScreenY", i), "nothing"), out screenY) ||
-                        !int.TryParse(GetValue(String.Format("CalibrationPoint_{0}_WebcamX", i), "nothing"), out webcamX) ||
-                        !int.TryParse(GetValue(String.Format("CalibrationPoint_{0}_WebcamY", i), "nothing"), out webcamY))
+                    float screenX, screenY, webcamX, webcamY;
+                    if (!float.TryParse(GetValue(String.Format("CalibrationPoint_{0}_ScreenX", i), "nothing"), out screenX) ||
+                        !float.TryParse(GetValue(String.Format("CalibrationPoint_{0}_ScreenY", i), "nothing"), out screenY) ||
+                        !float.TryParse(GetValue(String.Format("CalibrationPoint_{0}_WebcamX", i), "nothing"), out webcamX) ||
+                        !float.TryParse(GetValue(String.Format("CalibrationPoint_{0}_WebcamY", i), "nothing"), out webcamY))
                         continue;
 
                     r.Add(new CalibrationPoint(screenX, screenY, webcamX, webcamY));

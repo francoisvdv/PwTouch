@@ -11,6 +11,7 @@ namespace PwTouchInputProvider.Forms
 {
     public partial class Calibration : Form
     {
+        const float CalibrationPointMargin = 0.1f;
         const int SecondsToHoldCalibrationPoint = 5;
 
         InputProvider inputProvider;
@@ -90,14 +91,12 @@ namespace PwTouchInputProvider.Forms
         }
         List<CalibrationPoint> GetNewCalibrationPoints()
         {
-            const float margin = 0.1f;
-
             return new List<CalibrationPoint>()
             {
-                new CalibrationPoint(margin, margin), //top-left
-                new CalibrationPoint(1 - margin, margin), //top-right
-                new CalibrationPoint(margin, 1 - margin), //bottom-left
-                new CalibrationPoint(1 - margin, 1 - margin) //bottom-right
+                new CalibrationPoint(CalibrationPointMargin, CalibrationPointMargin), //top-left
+                new CalibrationPoint(1 - CalibrationPointMargin, CalibrationPointMargin), //top-right
+                new CalibrationPoint(1 - CalibrationPointMargin, 1 - CalibrationPointMargin), //bottom-right
+                new CalibrationPoint(CalibrationPointMargin, 1 - CalibrationPointMargin) //bottom-left
             };
         }
 
@@ -218,7 +217,7 @@ namespace PwTouchInputProvider.Forms
             if (closest != closestBlob)
             {
 #if DEBUG
-                closest.LifeTime = inputProvider.Camera.DesiredFrameRate * SecondsToHoldCalibrationPoint / 2; // 'reset' the LifeTime so we can check if it has lived long enough to be a good cp
+                closest.LifeTime = inputProvider.Camera.DesiredFrameRate * SecondsToHoldCalibrationPoint - 6; // 'reset' the LifeTime so we can check if it has lived long enough to be a good cp
 #else
                 closest.LifeTime = 2;
 #endif
