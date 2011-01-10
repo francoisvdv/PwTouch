@@ -20,7 +20,7 @@ namespace PwTouchInputProvider
         {
             frame = fSequence.Apply(frame);
 
-            blobCounter.ProcessImage(frame);
+            BlobCounter.ProcessImage(frame);
         }
     }
 }

@@ -87,6 +87,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="Tracker1.cs" />
     <Compile Include="TrackerBase.cs" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Voorbeeld.cs" />
   </ItemGroup>
   <ItemGroup>
