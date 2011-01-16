@@ -6,7 +6,7 @@ Om programma te starten:
 - Start MultiTouch.Configuration.WPF.exe
 - PwTouch, dan op blauwe knop met pijl dan scherm sluiten
 - Start MultiTouch.Driver.Console.exe
-- Start AddIns/PwTouch/PwTouchConfiguration.exe of PwTouchConfiguration.lnk
+- Start AddIns/PwTouch/PwTouchConfiguration.exe
 
 Om te compilen:
 - Extract EXTRACTME.rar (zodat er o.a. een Libraries map komt te staan in de zelfde map als deze README.txt)
