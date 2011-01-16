@@ -94,24 +94,30 @@ namespace PwTouchInputProvider.Forms
 
         public void OnCameraFrame(Bitmap image)
         {
-            if (pbNewCameraFrame.Image != null)
-                pbNewCameraFrame.Image.Dispose();
+            Image old = pbNewCameraFrame.Image;
 
             pbNewCameraFrame.Image = image;
+
+            if (old != null)
+                old.Dispose();
         }
         public void OnProcessedFrame(Bitmap image)
         {
-            if (pbProcessedFrame.Image != null)
-                pbProcessedFrame.Image.Dispose();
+            Image old = pbProcessedFrame.Image;
 
             pbProcessedFrame.Image = image;
+
+            if (old != null)
+                old.Dispose();
         }
         public void OnProcessedCameraFrame(Bitmap image)
         {
-            if (pbProcessedCameraFrame.Image != null)
-                pbProcessedCameraFrame.Image.Dispose();
-
+            Image old = pbProcessedCameraFrame.Image; 
+            
             pbProcessedCameraFrame.Image = image;
+
+            if (old != null)
+                old.Dispose();
         }
 
         //Configuration controls
