@@ -198,11 +198,11 @@ namespace PwTouchInputProvider.Forms
 
                 //If distance from blob to calibration point is greater than 20% of camera frame width/height, 
                 //this blob isn't a good calibration point.
-                PointF blobDistance = GetBlobDistance(closest, cp);
-                if (blobDistance.X > 0.20f || blobDistance.Y > 0.20f)
-                {
-                    closest = null;
-                }
+                //PointF blobDistance = GetBlobDistance(closest, cp);
+                //if (blobDistance.X > 0.20f || blobDistance.Y > 0.20f)
+                //{
+                //    closest = null;
+                //}
             }
 
             if (closest == null)

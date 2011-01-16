@@ -89,7 +89,7 @@ namespace PwTouchInputProvider
             if (!Directory.Exists(DetectorDirectory))
                 Directory.CreateDirectory(DetectorDirectory);
 
-            using (FileStream fs = new FileStream(DetectorDirectory + fileName + ".txt", FileMode.OpenOrCreate, FileAccess.Write, FileShare.None))
+            using (FileStream fs = new FileStream(DetectorDirectory + fileName + ".txt", FileMode.Create, FileAccess.Write, FileShare.None))
             {
                 using (StreamWriter sw = new StreamWriter(fs))
                 {
